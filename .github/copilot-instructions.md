@@ -1,0 +1,100 @@
+# copilot-instructions.md
+
+## 🎯 Objectif du projet
+Développer **Cosmetia**, une place de marché B2B spécialisée dans l’industrie cosmétique, connectant acheteurs et fournisseurs de matières premières et produits chimiques, inspirée des meilleures pratiques de Knowde.
+
+---
+
+## 🛠️ Technologies
+- **Framework** : Next.js (App Router, TypeScript, Server Actions)
+- **UI Library** : Shadcn UI (composants + tailwind)
+- **Icons** : Lucide Icons
+- **AI** : Intégration d’un assistant IA (formulation, sourcing, support client)
+
+---
+
+## 📜 Règles de codage
+1. **Rétrocompatibilité** :  
+   - Chaque nouvelle feature ou fix doit préserver la compatibilité avec les versions précédentes du produit.  
+   - Aucune rupture de fonctionnalité existante sans plan de migration clair.
+   
+2. **UI/UX** :  
+   - Interface élégante, accessible, et responsive suivant les guidelines **Shadcn UI** ou **Origin UI**.  
+   - Utiliser systématiquement des composants réutilisables.  
+   - Respecter l’identité visuelle du projet :  
+     - Couleurs primaires : `#166970` (Primary), `#000000` (Text), `#GFFBBF` (Icon), `#FFFFFF` (Background), `#F7F4EF` (Background2)
+     - Polices : Space Grotesk & Plus Jakarta Sans (base 16px)
+   
+3. **Performance** :  
+   - Code optimisé pour le rendu SSR/SSG suivant les bonnes pratiques Next.js.
+   - Lazy loading des composants lourds.
+   
+4. **Structure** :
+   - Organisation en modules par rôle utilisateur (U1, U2, U3, U4).
+   - Séparer logique métier et présentation.
+   - Commentaires clairs et concis dans le code.
+
+---
+
+## 📋 PRD – Cosmetia (à implémenter)
+### 1. Contexte & Vision
+Plateforme B2B avec sourcing accéléré, messagerie intelligente, gestion de leads, IA d’assistance, et modèle de monétisation mixte.
+
+### 2. Utilisateurs
+- **U1 – Fournisseurs** : ajout/gestion de produits, suivi de leads, devis, statistiques.
+- **U2 – Acheteurs** : marketplace, filtres, devis, commande assistée IA, favoris.
+- **U3 – Admin** : gestion comptes, leads, abonnements, support.
+- **U4 – Prestataires** : gestion commandes.
+
+### 3. Fonctionnalités MVP
+#### U1 – Fournisseurs
+- Tableau de bord leads (export CSV/Excel)
+- Gestion devis & workflow de validation
+- Catalogue produit enrichi (images, docs, logistique, certifications)
+- Stats : leads, conversion, CTR géo
+- Gestion profil fournisseur
+- Gestion abonnements & facturation
+- Messagerie privée + Chat IA
+
+#### U2 – Acheteurs
+- Marketplace produits/documents (recherche + filtres)
+- Liste fournisseurs (filtres géographiques & pertinence)
+- Demande devis multi-produits
+- Commande assistée IA (6 étapes : marketing → prestataire)
+- Favoris produits & documents
+- Messagerie privée + Chat IA
+
+#### U3 – Admin
+- Gestion & validation KYC fournisseurs
+- Gestion acheteurs
+- Distribution leads
+- Gestion abonnements
+- Support client
+
+#### U4 – Prestataires
+- Vue commandes à valider/refuser
+- Gestion profil
+
+### 4. V2 (Post-MVP)
+- IA de formulation & sourcing
+- Publicité et mise en avant produits
+- Statistiques avancées
+- Application mobile
+
+---
+
+## 📊 KPI Suivi
+- Leads générés / mois
+- Conversion leads → commandes
+- Téléchargements documents
+- Utilisation IA
+- CA abonnements & services
+
+---
+
+## 🧩 Notes pour Copilot
+- Toujours générer des composants **Shadcn UI** ou **Origin UI** conformes.
+- Utiliser Lucide Icons pour les icônes.
+- Optimiser pour Next.js App Router.
+- Préserver la rétrocompatibilité du code.
+- Respecter la charte graphique et les polices.
