@@ -42,6 +42,27 @@ Développer **Cosmetia**, une place de marché B2B spécialisée dans l’indust
 
 ---
 
+## 📋 Règles de développement
+1. **Développement** :
+   - Utiliser le framework Next.js (App Router, TypeScript, Server Actions).
+   - Utiliser le composant library Shadcn UI (composants + tailwind).
+   - Utiliser le composant library Lucide Icons pour les icônes.
+   - Utiliser le composant library Tailwind CSS pour les styles.
+   - toujours utiliser les composants réutilisables.
+   - toujours utiliser server actions si possible
+---
+
+## Règles d'implementation des Formulaires
+1. **Développement** :
+   - Utiliser react transition et les actionState pour les formulaires.
+   - utiliser les schemas de zod pour les formulaires.
+   - utiliser les composants réutilisables pour les formulaires.
+   - utiliser les server actions pour les formulaires.
+   - utiliser les composants réutilisables pour les formulaires.
+---
+
+---
+
 ## 📋 PRD – Cosmetia (à implémenter)
 ### 1. Contexte & Vision
 Plateforme B2B avec sourcing accéléré, messagerie intelligente, gestion de leads, IA d’assistance, et modèle de monétisation mixte.
