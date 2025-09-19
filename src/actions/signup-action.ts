@@ -11,7 +11,7 @@ const signupSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export async function signupAction(prevState: any, formData: FormData) {
+export async function signupAction(prevState: unknown, formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
@@ -66,6 +66,7 @@ export async function signupAction(prevState: any, formData: FormData) {
       data,
     };
   } catch (error) {
+    console.error(error);
     return {
       message: "Erreur de connexion au serveur",
     };

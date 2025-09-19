@@ -1,7 +1,7 @@
 "use server";
 
 
-export async function verifyEmailAction(prevState: any, formData: FormData) {
+export async function verifyEmailAction(prevState: unknown, formData: FormData) {
     const email = formData.get("email") as string;
     const otp = formData.get("otp") as string;
   
@@ -35,6 +35,7 @@ export async function verifyEmailAction(prevState: any, formData: FormData) {
         message: "Email vérifié avec succès",
       };
     } catch (error) {
+      console.error(error);
       return {
         error: "Erreur de connexion au serveur",
       };
