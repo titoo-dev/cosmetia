@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  NOT_VERIFIED
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum UserConnectionTypes {
+  EMAIL_PASSWORD
+  LINKEDIN
+}
+
+enum UserRole {
+  SUPPLIER
+  CUSTOMER
+  ADMIN
+  PROVIDER
+}
+
+enum OrderItemStatus {
+  PENDING
+  ACCEPTED
+  DONE
+  REJECTED
+}
+
+enum OrderStatus {
+  FORMULA_PENDING
+  FORMULA_REJECTED
+  FORMULA_ACCEPTED
+  CANCELLED
+}
+
+enum PackagingType {
+  BOTTLE
+  JAR
+  TUBE
+  BOX
+  OTHER
+}
+
+enum PlanType {
+  FREE
+  PAY_AS_YOU_GO
+  GROWTH
+}
+
+enum AiMessageRole {
+  USER
+  AI
+}
+
+enum LeadContext {
+  VISIT_PROFILE
+  VISIT_PRODUCT
+  VISIT_DOCUMENT
+  RESEARCH_RESULT
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email        String   @unique
+  password     String?
+  validationCode Int?
+  connectionType UserConnectionTypes @default(EMAIL_PASSWORD)
+  role         UserRole
+  status       UserStatus
+  lastLogin    DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  supplier SupplierUser?
+  customer CustomerUser?
+  provider ProviderUser?
+
+  orderComments OrderComment[]
+  aiGroupMessages AiGroupMessage[]
+  conversations ConversationUser[]
+  messages Message[]
+
+  raisonForDelete String?
+  deletedAt DateTime?
+  validationResetPassword Int?
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  id_seq Int @default(autoincrement())
+  tradeName String
+  description String
+  pictureId String?
+  inciName String
+  certificate String
+  pricePerQuantity String
+  deliveryTime String
+  regulationScore Int @default(2)
+  minimumOrderQuantity Int
+
+  categories ProductCategory[]
+  documents Document[]
+  functions ProductFunction[]
+  exportCountries ProductCountry[]
+  supplierId String?
+  supplier SupplierUser? @relation(fields: [supplierId], references: [id])
+  customersHaveFavorite CustomerUser[] @relation("ProductFavorite")
+  orderItems OrderItem[]
+  leadsCreated Lead[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
+}
+
+model ProductCategory {
+  id        String   @id @default(cuid())
+  name String
+  products Product[]
+}
+
+model ProductFunction {
+  id        String   @id @default(cuid())
+  name String
+  products Product[]
+}
+
+model ProductCountry {
+  id        String   @id @default(cuid())
+  name String
+  products Product[]
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  name String
+  technicalSheet String
+  description String
+  fileUrl String
+
+  products Product[]
+  customersHaveFavorite CustomerUser[] @relation("DocumentFavorite")
+  supplierId String?
+  supplier SupplierUser? @relation(fields: [supplierId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
+}
+
+model SupplierUser {
+  id        String   @id @default(cuid())
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+  companyName String
+  siretNumber String
+  nameOfContact String
+  phoneNumber String
+  website String
+  activityDescription String
+  pictureId String?
+  currentPlan PlanType @default(FREE)
+  invoicesForSupplier InvoiceForSupplier[]
+
+  products Product[]
+  documents Document[]
+}
+
+model CustomerUser {
+  id        String   @id @default(cuid())
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+  companyName String
+  nameOfContact String
+  phoneNumber String
+  purchaseObjective String
+  pictureId String?
+
+  productsFavorite Product[] @relation("ProductFavorite")
+  documentsFavorite Document[] @relation("DocumentFavorite")
+  orders Order[]
+  leadsCreated Lead[]
+}
+
+model ProviderUser {
+  id        String   @id @default(cuid())
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+  name String
+  description String
+  pictureId String?
+
+  orders Order[]
+  leadsCreated Lead[]
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id])  
+  quantity Int
+  status OrderItemStatus
+
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  reference String @default("")
+  orderItems OrderItem[]
+  finalResultFamily String @default("")
+  finalResultName String @default("")
+  finalResultQuantity Int @default(0)
+  targetMarket String @default("")
+  marketingAngle String @default("")
+  formula String @default("")
+  packagingType PackagingType @default(OTHER)
+  estimatedTotalCost Float @default(0)
+  status OrderStatus @default(FORMULA_PENDING)
+  
+  providerId String?
+  provider ProviderUser? @relation(fields: [providerId], references: [id])
+  customerId String
+  customer CustomerUser @relation(fields: [customerId], references: [id])
+  comments OrderComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderComment {
+  id        String   @id @default(cuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  context LeadContext
+  
+  customerId String
+  customer CustomerUser @relation(fields: [customerId], references: [id])
+
+  supplierId String?
+  supplier ProviderUser? @relation(fields: [supplierId], references: [id])
+
+  productId String?
+  product Product? @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InvoiceForSupplier {
+  id        String   @id @default(cuid())
+  reference String
+  planType PlanType
+  amount Float
+  supplierId String
+  supplier SupplierUser @relation(fields: [supplierId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AiMessage {
+  id        String   @id @default(cuid())
+  text   String
+  role      AiMessageRole
+
+  aiGroupMessageId String
+  aiGroupMessage   AiGroupMessage @relation(fields: [aiGroupMessageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AiGroupMessage {
+  id        String   @id @default(cuid())
+  messages  AiMessage[]
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Conversation {
+  id         String             @id @default(uuid())
+  name       String?           
+  messages   Message[]
+  users      ConversationUser[]
+
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime?           @updatedAt
+}
+
+model ConversationUser {
+  userId         String
+  conversationId String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  joinedAt       DateTime       @default(now())
+  @@id([userId, conversationId])
+}
+
+model Message {
+  id              String        @id @default(uuid())
+  content         String
+  senderId        String
+  conversationId  String
+  sender          User          @relation(fields: [senderId], references: [id])
+  conversation    Conversation  @relation(fields: [conversationId], references: [id])
+  createdAt       DateTime      @default(now())
+  isSeen          Boolean       @default(false)
+}
