@@ -2,6 +2,7 @@ import { Star } from "lucide-react";
 import { getCustomerProducts } from "@/actions/customer/marketplace/products/get-customer-product-action";
 import ProductsClient from "./products-client";
 import { getCategories } from "@/actions/customer/marketplace/get-categories-action";
+import { getFunctions } from "@/actions/customer/marketplace/get-functions-actions";
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -17,12 +18,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
     const products = await getCustomerProducts(searchParamsData);
     const categories = await getCategories();
-
+    const functions = await getFunctions();
     return (
         <ProductsClient 
             products={products}
             searchParams={searchParamsData}
             categories={categories}
+            functions={functions}
         />
     );
 }
