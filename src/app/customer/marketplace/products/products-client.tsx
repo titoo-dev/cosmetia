@@ -187,22 +187,6 @@ export default function ProductsClient({ products, searchParams }: ProductsClien
                                 {product.description}
                             </p>
 
-                            {/* Product Details */}
-                            <div className="px-4 mb-3">
-                                <div className="text-xs text-gray-500 mb-1">
-                                    <strong>INCI:</strong> {product.inciName}
-                                </div>
-                                <div className="text-xs text-gray-500 mb-1">
-                                    <strong>Price:</strong> {product.pricePerQuantity}
-                                </div>
-                                <div className="text-xs text-gray-500 mb-1">
-                                    <strong>Delivery:</strong> {product.deliveryTime}
-                                </div>
-                                <div className="text-xs text-gray-500 mb-1">
-                                    <strong>Min Order:</strong> {product.minimumOrderQuantity}
-                                </div>
-                            </div>
-
                             {/* Categories and Functions */}
                             <div className="px-4 mb-3">
                                 {product.categories && product.categories.length > 0 && (
@@ -227,7 +211,6 @@ export default function ProductsClient({ products, searchParams }: ProductsClien
 
                             {/* Regulation Score */}
                             <div className="flex items-center space-x-1 mb-4 px-4">
-                                <span className="text-xs text-gray-500">Regulation Score:</span>
                                 {renderStars(product.regulationScore)}
                             </div>
                         </CardContent>
