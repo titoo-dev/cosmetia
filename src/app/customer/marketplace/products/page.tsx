@@ -1,4 +1,3 @@
-import { Star } from "lucide-react";
 import { getCustomerProducts } from "@/actions/customer/marketplace/products/get-customer-product-action";
 import ProductsClient from "./products-client";
 import { getCategories } from "@/actions/customer/marketplace/get-categories-action";

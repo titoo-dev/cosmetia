@@ -12,7 +12,6 @@ export default function MarketplaceLayout({
   const pathname = usePathname();
   
   const isProductsActive = pathname === "/customer/marketplace" || pathname === "/customer/marketplace/products";
-  const isDocumentsActive = pathname === "/customer/marketplace/documents";
 
   return (
     <div className="min-h-screen bg-gray-50">
