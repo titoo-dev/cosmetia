@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle, MessageCircle, Search, Star } from "lucide-react";
-import { ProductEntity } from "@/lib/types/types";
+import { ProductCategoryEntity, ProductEntity } from "@/lib/types/types";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -18,9 +18,10 @@ interface ProductsClientProps {
         functionId?: string;
         exportCountrieId?: string;
     };
+    categories: ProductCategoryEntity[];
 }
 
-export default function ProductsClient({ products, searchParams }: ProductsClientProps) {
+export default function ProductsClient({ products, searchParams, categories }: ProductsClientProps) {
     const router = useRouter();
     const urlSearchParams = useSearchParams();
     
@@ -100,11 +101,11 @@ export default function ProductsClient({ products, searchParams }: ProductsClien
                         <SelectValue placeholder="Catégorie" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="oils">Oils</SelectItem>
-                        <SelectItem value="butters">Butters</SelectItem>
-                        <SelectItem value="extracts">Extracts</SelectItem>
-                        <SelectItem value="essential-oils">Essential Oils</SelectItem>
-                        <SelectItem value="active-ingredients">Active Ingredients</SelectItem>
+                        {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
 
