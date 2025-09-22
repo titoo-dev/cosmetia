@@ -80,7 +80,7 @@ export interface ProductEntity {
   id_seq: number;
   tradeName: string;
   description: string;
-  pictureId?: string;
+  pictureUrl?: string;
   inciName: string;
   certificate: string;
   pricePerQuantity: string;

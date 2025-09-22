@@ -8,6 +8,7 @@ import { CheckCircle, MessageCircle, Search, Star } from "lucide-react";
 import { ProductEntity } from "@/lib/types/types";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 interface ProductsClientProps {
     products: ProductEntity[];
@@ -141,8 +142,19 @@ export default function ProductsClient({ products, searchParams }: ProductsClien
                     <Card key={product.id} className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0">
                         <CardContent className="p-0">
                             {/* Product Image Placeholder */}
-                            <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 flex items-center justify-center">
-                                <div className="text-gray-400 text-sm">Product Image</div>
+                            <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 relative overflow-hidden">
+                                {product.pictureUrl ? (
+                                    <Image
+                                        src={product.pictureUrl}
+                                        alt={product.tradeName}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                        <div className="text-gray-400 text-sm">Product Image</div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Company Info */}
