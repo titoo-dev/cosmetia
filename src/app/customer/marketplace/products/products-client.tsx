@@ -28,9 +28,9 @@ export default function ProductsClient({ products, searchParams, categories, fun
     const urlSearchParams = useSearchParams();
     
     const [searchTerm, setSearchTerm] = useState(searchParams.query || "");
-    const [selectedFunction, setSelectedFunction] = useState(searchParams.functionId || "");
-    const [selectedCategory, setSelectedCategory] = useState(searchParams.categoryId || "");
-    const [selectedRegion, setSelectedRegion] = useState(searchParams.exportCountrieId || "");
+    const [selectedFunction, setSelectedFunction] = useState(searchParams.functionId || "all");
+    const [selectedCategory, setSelectedCategory] = useState(searchParams.categoryId || "all");
+    const [selectedRegion, setSelectedRegion] = useState(searchParams.exportCountrieId || "all");
 
     const handleSearch = (value: string) => {
         setSearchTerm(value);
@@ -55,7 +55,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
 
     const handleFilterChange = (key: string, value: string) => {
         const params = new URLSearchParams(urlSearchParams);
-        if (value) {
+        if (value && value !== "" && value !== "all") {
             params.set(key, value);
         } else {
             params.delete(key);
@@ -87,6 +87,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
                         <SelectValue placeholder="Fonction" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="all">Toutes les fonctions</SelectItem>
                         {functions.map((func) => (
                             <SelectItem key={func.id} value={func.id}>
                                 {func.name}
@@ -103,6 +104,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
                         <SelectValue placeholder="Catégorie" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="all">Toutes les catégories</SelectItem>
                         {categories.map((category) => (
                             <SelectItem key={category.id} value={category.id}>
                                 {category.name}
@@ -119,6 +121,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
                         <SelectValue placeholder="Pays" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="all">Tous les pays</SelectItem>
                         {countries.map((country) => (
                             <SelectItem key={country.id} value={country.id}>
                                 {country.name}
