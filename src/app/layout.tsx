@@ -31,7 +31,6 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} antialiased`}
       >
         {children}
-      </body>
       <footer className="bg-[#166970] text-white py-16">
 				<div className="container mx-auto px-6">
 					<div className="grid md:grid-cols-4 gap-8">
@@ -138,6 +137,7 @@ export default function RootLayout({
 					</div>
 				</div>
 			</footer>
+      </body>
     </html>
   );
 }
