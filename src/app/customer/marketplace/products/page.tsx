@@ -3,6 +3,7 @@ import { getCustomerProducts } from "@/actions/customer/marketplace/products/get
 import ProductsClient from "./products-client";
 import { getCategories } from "@/actions/customer/marketplace/get-categories-action";
 import { getFunctions } from "@/actions/customer/marketplace/get-functions-actions";
+import { getCountries } from "@/actions/customer/marketplace/get-countries-action";
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -16,15 +17,20 @@ interface ProductsPageProps {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
     const searchParamsData = await searchParams;
 
-    const products = await getCustomerProducts(searchParamsData);
-    const categories = await getCategories();
-    const functions = await getFunctions();
+    const [products, categories, functions, countries] = await Promise.all([
+        getCustomerProducts(searchParamsData),
+        getCategories(),
+        getFunctions(),
+        getCountries()
+    ]);
+
     return (
         <ProductsClient 
             products={products}
             searchParams={searchParamsData}
             categories={categories}
             functions={functions}
+            countries={countries}
         />
     );
 }

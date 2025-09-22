@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle, MessageCircle, Search, Star } from "lucide-react";
-import { ProductCategoryEntity, ProductEntity, ProductFunctionEntity } from "@/lib/types/types";
+import { ProductCategoryEntity, ProductCountryEntity, ProductEntity, ProductFunctionEntity } from "@/lib/types/types";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -20,9 +20,10 @@ interface ProductsClientProps {
     };
     categories: ProductCategoryEntity[];
     functions: ProductFunctionEntity[];
+    countries: ProductCountryEntity[];
 }
 
-export default function ProductsClient({ products, searchParams, categories, functions }: ProductsClientProps) {
+export default function ProductsClient({ products, searchParams, categories, functions, countries }: ProductsClientProps) {
     const router = useRouter();
     const urlSearchParams = useSearchParams();
     
@@ -115,25 +116,14 @@ export default function ProductsClient({ products, searchParams, categories, fun
                     handleFilterChange('exportCountrieId', value);
                 }}>
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Région" />
+                        <SelectValue placeholder="Pays" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="europe">Europe</SelectItem>
-                        <SelectItem value="asia">Asia</SelectItem>
-                        <SelectItem value="africa">Africa</SelectItem>
-                        <SelectItem value="americas">Americas</SelectItem>
-                    </SelectContent>
-                </Select>
-
-                <Select value="" onValueChange={() => {}}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Utilisation finale" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="skincare">Skincare</SelectItem>
-                        <SelectItem value="haircare">Haircare</SelectItem>
-                        <SelectItem value="makeup">Makeup</SelectItem>
-                        <SelectItem value="fragrance">Fragrance</SelectItem>
+                        {countries.map((country) => (
+                            <SelectItem key={country.id} value={country.id}>
+                                {country.name}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>
