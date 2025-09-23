@@ -159,18 +159,6 @@ export default function DocumentsClient({
                         ))}
                     </SelectContent>
                 </Select>
-
-                <Select value="" onValueChange={() => {}}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Utilisation finale" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="skincare">Skincare</SelectItem>
-                        <SelectItem value="haircare">Haircare</SelectItem>
-                        <SelectItem value="makeup">Makeup</SelectItem>
-                        <SelectItem value="fragrance">Fragrance</SelectItem>
-                    </SelectContent>
-                </Select>
             </div>
 
             {/* Document Grid */}
