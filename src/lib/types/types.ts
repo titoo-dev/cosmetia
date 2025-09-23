@@ -90,7 +90,7 @@ export interface ProductEntity {
   categories: ProductCategoryEntity[];
   documents: DocumentEntity[];
   functions: ProductFunctionEntity[];
-  exportCountries: ProductCountryEntity[];
+  countries: ProductCountryEntity[];
   supplierId?: string;
   supplier?: SupplierUserEntity;
   createdAt: Date;

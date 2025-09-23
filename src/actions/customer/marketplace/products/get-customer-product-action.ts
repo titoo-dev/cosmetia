@@ -38,7 +38,7 @@ export async function getCustomerProducts(params?: {
 
         const products = await response.json();
 
-        console.log(products);
+        console.log('PRODUCTS', products);
 
         return products;
     } catch (error) {
@@ -49,7 +49,7 @@ export async function getCustomerProducts(params?: {
 
 export async function getCustomerProductById(id: string): Promise<ProductEntity | null> {
     try {
-        const response = await fetch(`${process.env.API_BASE_URL}/customer/marketplace/products/${id}`, {
+        const response = await fetch(`${process.env.API_BASE_URL}/product/customer/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -57,11 +57,10 @@ export async function getCustomerProductById(id: string): Promise<ProductEntity 
             cache: "no-store",
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch product with id: ${id}`);
-        }
-
         const product = await response.json();
+
+        console.log('PRODUCT', product);
+
         return product;
     } catch (error) {
         console.error(`Error fetching customer product ${id}:`, error);

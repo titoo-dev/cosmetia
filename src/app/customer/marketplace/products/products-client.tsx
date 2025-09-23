@@ -9,6 +9,7 @@ import { ProductCategoryEntity, ProductCountryEntity, ProductEntity, ProductFunc
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductsClientProps {
     products: ProductEntity[];
@@ -26,7 +27,7 @@ interface ProductsClientProps {
 export default function ProductsClient({ products, searchParams, categories, functions, countries }: ProductsClientProps) {
     const router = useRouter();
     const urlSearchParams = useSearchParams();
-    
+
     const [searchTerm, setSearchTerm] = useState(searchParams.query || "");
     const [selectedFunction, setSelectedFunction] = useState(searchParams.functionId || "all");
     const [selectedCategory, setSelectedCategory] = useState(searchParams.categoryId || "all");
@@ -134,82 +135,84 @@ export default function ProductsClient({ products, searchParams, categories, fun
             {/* Product Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {products.map((product) => (
-                    <Card key={product.id} className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0">
-                        <CardContent className="p-0">
-                            {/* Product Image Placeholder */}
-                            <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 relative overflow-hidden">
-                                {product.pictureUrl ? (
-                                    <Image
-                                        src={product.pictureUrl}
-                                        alt={product.tradeName}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <div className="text-gray-400 text-sm">Product Image</div>
-                                    </div>
-                                )}
-                            </div>
+                    <Link href={`/customer/marketplace/products/${product.id}`} key={product.id}>
+                        <Card className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0 cursor-pointer">
+                            <CardContent className="p-0">
+                                {/* Product Image Placeholder */}
+                                <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 relative overflow-hidden">
+                                    {product.pictureUrl ? (
+                                        <Image
+                                            src={product.pictureUrl}
+                                            alt={product.tradeName}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <div className="text-gray-400 text-sm">Product Image</div>
+                                        </div>
+                                    )}
+                                </div>
 
-                            {/* Company Info */}
-                            <div className="flex items-center justify-between mb-3 px-4">
-                                <div className="flex items-center space-x-2">
-                                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                                        <span className="text-white text-xs font-bold">
-                                            {product.supplier?.companyName?.charAt(0) || 'N/A'}
+                                {/* Company Info */}
+                                <div className="flex items-center justify-between mb-3 px-4">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <span className="text-white text-xs font-bold">
+                                                {product.supplier?.companyName?.charAt(0) || 'N/A'}
+                                            </span>
+                                        </div>
+                                        <span className="text-sm font-medium text-gray-700">
+                                            {product.supplier?.companyName || 'Unknown Supplier'}
                                         </span>
                                     </div>
-                                    <span className="text-sm font-medium text-gray-700">
-                                        {product.supplier?.companyName || 'Unknown Supplier'}
-                                    </span>
+                                    {product.certificate && (
+                                        <div className="flex items-center space-x-1">
+                                            <CheckCircle className="w-4 h-4 text-green-500" />
+                                            <span className="text-xs text-green-600 font-medium">Certifier</span>
+                                        </div>
+                                    )}
                                 </div>
-                                {product.certificate && (
-                                    <div className="flex items-center space-x-1">
-                                        <CheckCircle className="w-4 h-4 text-green-500" />
-                                        <span className="text-xs text-green-600 font-medium">Certifier</span>
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* Product Name */}
-                            <h3 className="font-bold text-lg text-gray-900 mb-2 px-4">
-                                {product.tradeName}
-                            </h3>
+                                {/* Product Name */}
+                                <h3 className="font-bold text-lg text-gray-900 mb-2 px-4">
+                                    {product.tradeName}
+                                </h3>
 
-                            {/* Description */}
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-2 px-4">
-                                {product.description}
-                            </p>
+                                {/* Description */}
+                                <p className="text-sm text-gray-600 mb-3 line-clamp-2 px-4">
+                                    {product.description}
+                                </p>
 
-                            {/* Categories and Functions */}
-                            <div className="px-4 mb-3">
-                                {product.categories && product.categories.length > 0 && (
-                                    <div className="flex flex-wrap gap-1 mb-2">
-                                        {product.categories.slice(0, 2).map((category, index) => (
-                                            <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                                {category.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                                {product.functions && product.functions.length > 0 && (
-                                    <div className="flex flex-wrap gap-1">
-                                        {product.functions.slice(0, 2).map((func, index) => (
-                                            <span key={index} className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                                                {func.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                {/* Categories and Functions */}
+                                <div className="px-4 mb-3">
+                                    {product.categories && product.categories.length > 0 && (
+                                        <div className="flex flex-wrap gap-1 mb-2">
+                                            {product.categories.slice(0, 2).map((category, index) => (
+                                                <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                                    {category.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {product.functions && product.functions.length > 0 && (
+                                        <div className="flex flex-wrap gap-1">
+                                            {product.functions.slice(0, 2).map((func, index) => (
+                                                <span key={index} className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                                    {func.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
 
-                            {/* Regulation Score */}
-                            <div className="flex items-center space-x-1 mb-4 px-4">
-                                {renderStars(product.regulationScore)}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                {/* Regulation Score */}
+                                <div className="flex items-center space-x-1 mb-4 px-4">
+                                    {renderStars(product.regulationScore)}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 ))}
             </div>
 
