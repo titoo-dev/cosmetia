@@ -16,7 +16,6 @@ export default function CustomerRegisterLayout({ children }: CustomerRegisterLay
                     fill
                     className="object-cover brightness-75"
                 />
-                {/* <div className="absolute inset-0 bg-gradient-to-br from-[#166970]/20 to-[#166970]/40"></div> */}
                 <div className="absolute top-8 left-8">
                     <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-[#166970] rounded-lg flex items-center justify-center">
