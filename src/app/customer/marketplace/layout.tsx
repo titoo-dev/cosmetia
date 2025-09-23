@@ -13,26 +13,34 @@ export default function MarketplaceLayout({
   
   const isProductsActive = pathname === "/customer/marketplace" || pathname === "/customer/marketplace/products";
 
+  // display none if url contain id
+  const isIdActive = /\/customer\/marketplace\/products\/[^\/]+/.test(pathname);
+  
   return (
     <div className="min-h-screen bg-gray-50">
+      {!isIdActive && (
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <Tabs value={isProductsActive ? "products" : "documents"} className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+              <TabsTrigger value="products" asChild>
+                <Link href="/customer/marketplace/products" className="text-sm font-semibold">
+                  Produits
+                </Link>
+              </TabsTrigger>
+              <TabsTrigger value="documents" asChild>
+                <Link href="/customer/marketplace/documents" className="text-sm font-semibold">
+                  Documents
+                </Link>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      )}
+      
       <div className="max-w-7xl mx-auto px-4 py-4">
-        <Tabs value={isProductsActive ? "products" : "documents"} className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
-            <TabsTrigger value="products" asChild>
-              <Link href="/customer/marketplace/products" className="text-sm font-semibold">
-                Produits
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="documents" asChild>
-              <Link href="/customer/marketplace/documents" className="text-sm font-semibold">
-                Documents
-              </Link>
-            </TabsTrigger>
-          </TabsList>
-          
-          {children}
-        </Tabs>
+       {children}
       </div>
+      
     </div>
   );
 }
