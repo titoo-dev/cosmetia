@@ -20,7 +20,7 @@ export default function Home() {
 						</div>
 						<nav className="hidden md:flex items-center space-x-8">
 							<Link
-								href="/marketplace"
+								href="/customer/marketplace"
 								className="text-gray-600 hover:text-[#166970] transition-colors"
 							>
 								Marketplace
@@ -43,9 +43,12 @@ export default function Home() {
 							>
 								Se connecter
 							</Link>
-							<button className="bg-[#166970] text-white px-6 py-2 rounded-lg hover:bg-[#145a61] transition-colors">
+							<Link
+								href="/signup"
+								className="bg-[#166970] text-white px-6 py-2 rounded-lg hover:bg-[#145a61] transition-colors inline-block"
+							>
 								Créer un compte
-							</button>
+							</Link>
 						</nav>
 					</div>
 				</div>
@@ -64,11 +67,11 @@ export default function Home() {
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
 						<button className="bg-[#166970] text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-[#145a61] transition-colors flex items-center gap-2">
-							Découvrir la marketplace
+							S'inscrire en tant qu'acheteur
 							<ArrowRight className="w-5 h-5" />
 						</button>
 						<button className="border-2 border-[#166970] text-[#166970] px-8 py-4 rounded-lg text-lg font-semibold hover:bg-[#166970] hover:text-white transition-colors">
-							Devenir fournisseur
+							S'inscrire en tant que fournisseur
 						</button>
 					</div>
 				</div>
@@ -163,9 +166,9 @@ export default function Home() {
 									Assistant IA pour la formulation
 								</li>
 							</ul>
-							<button className="bg-[#166970] text-white px-6 py-3 rounded-lg hover:bg-[#145a61] transition-colors">
+							<Link href="/customer/marketplace/products" className="bg-[#166970] text-white px-6 py-3 rounded-lg hover:bg-[#145a61] transition-colors inline-block">
 								Explorer le marketplace
-							</button>
+							</Link>
 						</div>
 
 						{/* For Suppliers */}
@@ -196,9 +199,9 @@ export default function Home() {
 									Relation client simplifiée
 								</li>
 							</ul>
-							<button className="border-2 border-[#166970] text-[#166970] px-6 py-3 rounded-lg hover:bg-[#166970] hover:text-white transition-colors">
+							<Link href="/supplier/register" className="border-2 border-[#166970] text-[#166970] px-6 py-3 rounded-lg hover:bg-[#166970] hover:text-white transition-colors inline-block">
 								Rejoindre en tant que fournisseur
-							</button>
+							</Link>
 						</div>
 					</div>
 				</div>
