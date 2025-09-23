@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Heart, Share2, Download, FileText, Star } from "lucide-react";
+import { Heart, Share2, Star } from "lucide-react";
 import { useState } from "react";
 import { ProductEntity } from "@/lib/types/types";
 

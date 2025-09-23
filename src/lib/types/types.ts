@@ -137,7 +137,7 @@ export interface SupplierUserEntity {
   phoneNumber: string;
   website: string;
   activityDescription: string;
-  pictureId?: string;
+  pictureUrl?: string;
   currentPlan: PlanType;
   products: ProductEntity[];
   documents: DocumentEntity[];

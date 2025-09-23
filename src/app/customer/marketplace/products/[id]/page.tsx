@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Star, Download, FileText } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { getCustomerProductById } from "@/actions/customer/marketplace/products/get-customer-product-action";
 import { notFound } from "next/navigation";
 import ProductDetailClient from "./product-detail-client";
