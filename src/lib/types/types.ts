@@ -282,3 +282,7 @@ export interface MessageEntity {
   createdAt: Date;
   isSeen: boolean;
 }
+
+export type ServerMessage = {
+  message: string;
+}

@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useActionState, useRef, useEffect, useState, use } from "react";
-import { verifyEmailAction } from "@/actions/verify-email-action";
+import { verifyEmailAction } from "@/actions/customer/register/verify-email-action";
 
 
 export default function VerifyPage({

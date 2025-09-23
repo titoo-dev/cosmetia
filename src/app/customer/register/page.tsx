@@ -6,14 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState } from "react";
-import { signupAction } from "@/actions/signup-action";
+import { registerCustomerAction } from "@/actions/customer/register/register-customer-action";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function SignupPage() {
-    const [state, formAction, isPending] = useActionState(signupAction, {
+    const router = useRouter();
+    const [state, formAction, isPending] = useActionState(registerCustomerAction, {
         errors: {},
         message: "",
     });
+
+    if (state.errors) {
+        toast.error(state.message);
+    }
+
+    if (state.success) {
+        router.push("/customer/register/verify?email=" + state.data.email);
+    }
 
     return (
         <div className="min-h-screen flex">
