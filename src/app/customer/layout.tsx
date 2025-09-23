@@ -14,11 +14,14 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
 
   const pathname = usePathname();
 
-  const isRegisterPathName = pathname === "/customer/register";
+  const excludePaths = [
+    "/customer/register",
+    "/customer/register/verify",
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {!isRegisterPathName && <CustomerNavbar />}
+      {!excludePaths.includes(pathname) && <CustomerNavbar />}
       <main>{children}</main>
       <Toaster />
     </div>

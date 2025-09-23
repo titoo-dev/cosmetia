@@ -5,26 +5,28 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { registerCustomerAction } from "@/actions/customer/register/register-customer-action";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function SignupPage() {
+export default function RegisterPage() {
     const router = useRouter();
     const [state, formAction, isPending] = useActionState(registerCustomerAction, {
         errors: {},
         message: "",
     });
 
-    if (state.errors) {
-        toast.error(state.message);
-    }
+    useEffect(() => {
+        if (state.errors) {
+            toast.error(state.message);
+        }
 
-    if (state.success) {
-        router.push("/customer/register/verify?email=" + state.data.email);
-    }
+        if (state.success) {
+            router.push("/customer/register/verify?email=" + state.data.email);
+        }
+    }, [state.errors, state.success]);
 
     return (
         <div className="min-h-screen flex">
