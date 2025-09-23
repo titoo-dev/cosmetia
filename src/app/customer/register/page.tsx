@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState } from "react";
 import { signupAction } from "@/actions/signup-action";
-
+import Image from "next/image";
 
 export default function SignupPage() {
     const [state, formAction, isPending] = useActionState(signupAction, {
@@ -19,15 +19,13 @@ export default function SignupPage() {
         <div className="min-h-screen flex">
             {/* Left side - Image */}
             <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                        backgroundImage: "url('/images/signup-bg.jpg')",
-                        filter: "brightness(0.7)"
-                    }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#166970]/20 to-[#166970]/40"></div>
-                </div>
+                <Image
+                    src="/images/hero_image_register_customer.png"
+                    alt="Customer registration hero image"
+                    fill
+                    className="object-cover brightness-75"
+                />
+                {/* <div className="absolute inset-0 bg-gradient-to-br from-[#166970]/20 to-[#166970]/40"></div> */}
                 <div className="absolute top-8 left-8">
                     <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-[#166970] rounded-lg flex items-center justify-center">
