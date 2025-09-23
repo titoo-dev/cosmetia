@@ -1,5 +1,8 @@
+"use client";
+
 import { ReactNode } from "react";
 import CustomerNavbar from "@/components/customer/navbar";
+import { usePathname } from "next/navigation";
 
 interface CustomerLayoutProps {
   children: ReactNode;
@@ -7,9 +10,14 @@ interface CustomerLayoutProps {
 
 
 export default function CustomerLayout({ children }: CustomerLayoutProps) {
+
+  const pathname = usePathname();
+
+  const isRegisterPathName = pathname === "/customer/register";
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <CustomerNavbar />
+      {!isRegisterPathName && <CustomerNavbar />}
       <main>{children}</main>
     </div>
   );
