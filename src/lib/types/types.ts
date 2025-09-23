@@ -286,3 +286,8 @@ export interface MessageEntity {
 export type ServerMessage = {
   message: string;
 }
+
+export type SessionToken = {
+  access_token: string;
+  refresh_token: string;
+}

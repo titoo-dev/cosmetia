@@ -1,5 +1,9 @@
 "use server";
 
+import { saveTokens } from "@/lib/cookies-storage";
+import { SessionToken } from "@/lib/types/types";
+import { revalidatePath } from "next/cache";
+
 
 export async function verifyEmailAction(prevState: unknown, formData: FormData) {
     const email = formData.get("email") as string;
@@ -12,7 +16,7 @@ export async function verifyEmailAction(prevState: unknown, formData: FormData) 
     }
   
     try {
-      const response = await fetch("https://cos-api-dev.nouralalaam.com/auth/verifyEmail", {
+      const response = await fetch(`${process.env.API_BASE_URL}/auth/verifyEmail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,17 +26,20 @@ export async function verifyEmailAction(prevState: unknown, formData: FormData) 
           code: parseInt(otp),
         }),
       });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        return {
-          error: errorData.message || "Erreur lors de la vérification",
-        };
+
+      const data: SessionToken = await response.json();
+
+      if (data.access_token && data.refresh_token) {
+        await saveTokens({
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token,
+        });
       }
-  
+
       return {
         success: true,
         message: "Email vérifié avec succès",
+        data,
       };
     } catch (error) {
       console.error(error);

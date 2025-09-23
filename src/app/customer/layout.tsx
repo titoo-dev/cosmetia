@@ -17,6 +17,7 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
   const excludePaths = [
     "/customer/register",
     "/customer/register/verify",
+    "/customer/register/last-step",
   ];
 
   return (
