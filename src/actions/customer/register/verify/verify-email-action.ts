@@ -2,7 +2,6 @@
 
 import { saveTokens } from "@/lib/cookies-storage";
 import { SessionToken } from "@/lib/types/types";
-import { revalidatePath } from "next/cache";
 
 
 export async function verifyEmailAction(prevState: unknown, formData: FormData) {

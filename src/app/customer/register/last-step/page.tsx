@@ -6,18 +6,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Building, Phone, User } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useActionState } from "react";
+import { updateCustomerInfoAction } from "@/actions/customer/register/last-step/update-customer-info-action";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function LastStepCustomerPage() {
+    const router = useRouter();
     const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [state, formAction, isPending] = useActionState(updateCustomerInfoAction, {
+        errors: {},
+        message: "",
+    });
+    const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        if (state.errors && Object.keys(state.errors).length > 0) {
+            toast.error(state.message || "Erreur de validation");
+        }
+
+        if (state.success) {
+            toast.success(state.message);
+            router.push("/customer");
+        }
+    }, [state.errors, state.success, state.message, router]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setProfileImage(e.target?.result as string);
+                const result = e.target?.result as string;
+                setProfileImage(result);
+                // Update the hidden input with the base64 image
+                const pictureInput = document.getElementById('picture') as HTMLInputElement;
+                if (pictureInput) {
+                    pictureInput.value = result;
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -33,7 +59,8 @@ export default function LastStepCustomerPage() {
                     Complétez vos informations personnelles
                 </p>
             </div>
-                <form className="space-y-6">
+
+                <form ref={formRef} action={formAction} className="space-y-6">
                     {/* Profile Image */}
                     <div className="flex justify-center mb-6">
                         <div className="relative">
@@ -61,61 +88,81 @@ export default function LastStepCustomerPage() {
                         </div>
                     </div>
 
+                    {/* Hidden input for picture */}
+                    <input type="hidden" id="picture" name="picture" />
+
                     {/* First Name & Last Name */}
                     <div className="space-y-2">
-                        <Label htmlFor="fullName">
+                        <Label htmlFor="nameOfContact">
                             Nom & prénom *
                         </Label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
-                                id="fullName"
+                                id="nameOfContact"
+                                name="nameOfContact"
                                 type="text"
                                 placeholder="Prénom Nom"
-                                className="pl-10"
+                                className={`pl-10 ${state.errors?.nameOfContact ? "border-red-500" : ""}`}
+                                disabled={isPending}
+                                required
                             />
                         </div>
+                        {state.errors?.nameOfContact && (
+                            <p className="text-sm text-red-600">{state.errors.nameOfContact}</p>
+                        )}
                     </div>
 
                     {/* Company */}
                     <div className="space-y-2">
-                        <Label htmlFor="company">
+                        <Label htmlFor="companyName">
                             Société
                         </Label>
                         <div className="relative">
                             <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
-                                id="company"
+                                id="companyName"
+                                name="companyName"
                                 type="text"
                                 placeholder="Nom de votre société"
-                                className="pl-10"
+                                className={`pl-10 ${state.errors?.companyName ? "border-red-500" : ""}`}
+                                disabled={isPending}
                             />
                         </div>
+                        {state.errors?.companyName && (
+                            <p className="text-sm text-red-600">{state.errors.companyName}</p>
+                        )}
                     </div>
 
                     {/* Phone */}
                     <div className="space-y-2">
-                        <Label htmlFor="phone">
-                            Téléphone
+                        <Label htmlFor="phoneNumber">
+                            Téléphone *
                         </Label>
                         <div className="relative">
                             <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
-                                id="phone"
+                                id="phoneNumber"
+                                name="phoneNumber"
                                 type="tel"
                                 placeholder="+33 6 12 34 56 78"
-                                className="pl-10"
+                                className={`pl-10 ${state.errors?.phoneNumber ? "border-red-500" : ""}`}
+                                disabled={isPending}
+                                required
                             />
                         </div>
+                        {state.errors?.phoneNumber && (
+                            <p className="text-sm text-red-600">{state.errors.phoneNumber}</p>
+                        )}
                     </div>
 
                     {/* Object of Activity */}
                     <div className="space-y-2">
                         <Label htmlFor="purchaseObjective">
-                            Objectif d'achat
+                            Objectif d'achat *
                         </Label>
-                        <Select>
-                            <SelectTrigger className="w-full">
+                        <Select name="purchaseObjective" required disabled={isPending}>
+                            <SelectTrigger className={`w-full ${state.errors?.purchaseObjective ? "border-red-500" : ""}`}>
                                 <SelectValue placeholder="Sélectionnez votre objectif d'achat" />
                             </SelectTrigger>
                             <SelectContent>
@@ -128,6 +175,9 @@ export default function LastStepCustomerPage() {
                                 <SelectItem value="other">Autre</SelectItem>
                             </SelectContent>
                         </Select>
+                        {state.errors?.purchaseObjective && (
+                            <p className="text-sm text-red-600">{state.errors.purchaseObjective}</p>
+                        )}
                     </div>
 
                     {/* Signup Button */}
@@ -135,8 +185,9 @@ export default function LastStepCustomerPage() {
                         type="submit"
                         className="w-full bg-[#166970] hover:bg-[#145a61]"
                         size="lg"
+                        disabled={isPending}
                     >
-                        Enregistrer
+                        {isPending ? "Enregistrement en cours..." : "Enregistrer"}
                     </Button>
                 </form>
         </div>
