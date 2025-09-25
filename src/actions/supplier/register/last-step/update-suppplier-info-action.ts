@@ -1,4 +1,7 @@
+"use server";
+
 import z from "zod";
+import { getAccessToken } from "@/lib/cookies-storage";
 
 const updateSupplierInfoSchema = z.object({
     companyName: z.string().optional(),
@@ -9,11 +12,6 @@ const updateSupplierInfoSchema = z.object({
     activityDescription: z.string().min(1, "La description de l'activité est requise"),
     picture: z.string().optional(),
 });
-
-
-"use server";
-
-import { getAccessToken } from "@/lib/cookies-storage";
 
 export async function updateSupplierInfoAction(prevState: unknown, formData: FormData) {
     const companyName = formData.get("companyName") as string;
@@ -43,7 +41,7 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
 
     try {
         const accessToken = await getAccessToken();
-        
+
         if (!accessToken) {
             return {
                 error: "Token d'accès non trouvé",
