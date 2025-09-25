@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState, useEffect } from "react";
-import { registerCustomerAction } from "@/actions/customer/register/register-customer-action";
+import { registerSupplierAction } from "@/actions/supplier/register/register-supplier-action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [state, formAction, isPending] = useActionState(registerCustomerAction, {
+    const [state, formAction, isPending] = useActionState(registerSupplierAction, {
         errors: {},
         message: "",
     });
@@ -23,7 +23,7 @@ export default function RegisterPage() {
         }
 
         if (state.success) {
-            router.push("/customer/register/verify?email=" + state.data.email);
+            router.push("/supplier/register/verify?email=" + state.data.email);
         }
     }, [state.errors, state.success]);
 
@@ -31,7 +31,7 @@ export default function RegisterPage() {
         <Card className="shadow-none">
             <CardHeader className="text-center">
                 <CardTitle className="text-2xl font-bold text-black font-space-grotesk">
-                    Inscription acheteur
+                    Inscription fournisseur
                 </CardTitle>
                 <CardDescription className="text-gray-600 font-plus-jakarta">
                     Veuillez fournir vos informations
@@ -132,7 +132,7 @@ export default function RegisterPage() {
             <CardFooter className="justify-center">
                 <span className="text-gray-600">Déjà un compte ? </span>
                 <Link
-                    href="/login"
+                    href="/supplier/login"
                     className="text-[#166970] hover:text-[#145a61] font-semibold transition-colors ml-1"
                 >
                     Se connecter
