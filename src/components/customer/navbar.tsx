@@ -11,7 +11,7 @@ export default function CustomerNavbar() {
     const navLinks = [
         { href: "/customer/marketplace", label: "Marketplace" },
         { href: "/customer/suppliers", label: "Fournisseurs" },
-        { href: "/customer/quotes", label: "Devis" },
+        { href: "/customer/orders", label: "Devis" },
         { href: "/customer/statistics", label: "Statistiques" },
     ];
 
