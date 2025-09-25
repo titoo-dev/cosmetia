@@ -4,7 +4,7 @@ import { saveTokens } from "@/lib/cookies-storage";
 import { SessionToken } from "@/lib/types/types";
 
 
-export async function verifyEmailAction(prevState: unknown, formData: FormData) {
+export async function verifyCustomerEmailAction(prevState: unknown, formData: FormData) {
     const email = formData.get("email") as string;
     const otp = formData.get("otp") as string;
   

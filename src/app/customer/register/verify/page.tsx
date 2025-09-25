@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState, useRef, useEffect, useState, use } from "react";
-import { verifyEmailAction } from "@/actions/customer/register/verify/verify-email-action";
+import { verifyCustomerEmailAction } from "@/actions/customer/register/verify/verify-customer-email-action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -14,7 +14,7 @@ export default function VerifyPage({
 	searchParams: Promise<{ email: string }>;
 }) {
 	const params = use(searchParams);
-	const [state, formAction, isPending] = useActionState(verifyEmailAction, {
+	const [state, formAction, isPending] = useActionState(verifyCustomerEmailAction, {
 		error: "",
 	});
 	const [otp, setOtp] = useState(['', '', '', '', '', '']);
