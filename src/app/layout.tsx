@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/footer";
+import NextTopLoader from 'nextjs-toploader';
+import { QueryProvider } from "@/components/auth/query-provider";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -30,7 +32,14 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} antialiased`}
       >
-        {children}
+        <NextTopLoader
+          showSpinner={false}
+          shadow={false}
+          color="var(--primary)"
+        />
+        <QueryProvider>
+          {children}
+        </QueryProvider>
         <Footer />
       </body>
     </html>

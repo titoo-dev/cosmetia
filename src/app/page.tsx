@@ -1,5 +1,8 @@
+import { Navigation } from "@/components/navigation";
 import { ArrowRight, Search, Users, Globe, Zap } from "lucide-react";
 import Link from "next/link";
+
+export const dynamic = 'force-dynamic'
 
 export default function Home() {
   return (
@@ -41,42 +44,7 @@ function Logo() {
 	);
 }
 
-function Navigation() {
-	return (
-		<nav className="hidden md:flex items-center space-x-8">
-			<Link
-				href="/customer/marketplace"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Marketplace
-			</Link>
-			<Link
-				href="/suppliers"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Fournisseurs
-			</Link>
-			<Link
-				href="/pricing"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Tarifs
-			</Link>
-			<Link
-				href="/login"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Se connecter
-			</Link>
-			<Link
-				href="/customer/register"
-				className="bg-[#166970] text-white px-6 py-2 rounded-lg hover:bg-[#145a61] transition-colors inline-block"
-			>
-				Créer un compte
-			</Link>
-		</nav>
-	);
-}
+
 
 function HeroSection() {
 	return (
