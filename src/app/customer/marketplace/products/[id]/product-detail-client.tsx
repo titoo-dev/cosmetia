@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Heart, Share2, Star } from "lucide-react";
+import { Heart, Share2 } from "lucide-react";
 import { useState } from "react";
 import { ProductEntity } from "@/lib/types/types";
 
@@ -16,37 +16,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     const [quantity, setQuantity] = useState("");
     const [quantityUnit, setQuantityUnit] = useState("Kg");
     const [isFavorite, setIsFavorite] = useState(false);
-
-    const renderStars = (rating: number) => {
-        return Array.from({ length: 5 }, (_, i) => (
-            <Star
-                key={i}
-                className={`w-4 h-4 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-            />
-        ));
-    };
-
-    const getCompanyLogo = (companyName: string) => {
-        const logos: { [key: string]: string } = {
-            "Givaudan": "G",
-            "Symrise": "S",
-            "Firmenich": "F",
-            "Lancôme": "L",
-            "Biotherm": "B"
-        };
-        return logos[companyName] || companyName.charAt(0);
-    };
-
-    const getCompanyLogoColor = (companyName: string) => {
-        const colors: { [key: string]: string } = {
-            "Givaudan": "bg-blue-600",
-            "Symrise": "bg-purple-600",
-            "Firmenich": "bg-green-600",
-            "Lancôme": "bg-red-600",
-            "Biotherm": "bg-blue-500"
-        };
-        return colors[companyName] || "bg-gray-600";
-    };
 
     return (
         <>

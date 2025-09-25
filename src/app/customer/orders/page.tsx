@@ -1,5 +1,5 @@
 import { getCustomerOrdersAction } from "@/actions/customer/orders/get-customer-orders-action";
-import { OrderEntity, OrderStatus } from "@/lib/types/types";
+import { OrderEntity } from "@/lib/types/types";
 import OrdersClient from "./orders-client";
 
 export default async function OrdersPage() {

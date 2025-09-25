@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import CustomerNavbar from "@/components/customer/navbar";
 import { usePathname } from "next/navigation";
 import { Toaster } from "sonner";
+import RenderWhen from "@/components/render-when";
 
 interface CustomerLayoutProps {
   children: ReactNode;
@@ -22,7 +23,9 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {!excludePaths.includes(pathname) && <CustomerNavbar />}
+      <RenderWhen condition={!excludePaths.includes(pathname)}>
+        <CustomerNavbar />
+      </RenderWhen>
       <main>{children}</main>
       <Toaster />
     </div>

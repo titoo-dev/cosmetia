@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/navigation";
+import { Header } from "@/components/header";
 import { ArrowRight, Search, Users, Globe, Zap } from "lucide-react";
 import Link from "next/link";
 
@@ -7,7 +7,6 @@ export const dynamic = 'force-dynamic'
 export default function Home() {
   return (
 		<div className="min-h-screen bg-white">
-			<Header />
 			<HeroSection />
 			<FeaturesSection />
 			<TargetAudienceSection />
@@ -15,36 +14,6 @@ export default function Home() {
 		</div>
   );
 }
-
-function Header() {
-	return (
-		<header className="border-b border-gray-100">
-			<div className="container mx-auto px-6 py-4">
-				<div className="flex items-center justify-between">
-					<Logo />
-					<Navigation />
-				</div>
-			</div>
-		</header>
-	);
-}
-
-function Logo() {
-	return (
-		<div className="flex items-center space-x-2">
-			<div className="w-8 h-8 bg-[#166970] rounded-lg flex items-center justify-center">
-				<span className="text-white font-bold text-sm">
-					C
-				</span>
-			</div>
-			<span className="text-xl font-bold text-[#166970] font-space-grotesk">
-				Cosmetia
-			</span>
-		</div>
-	);
-}
-
-
 
 function HeroSection() {
 	return (
