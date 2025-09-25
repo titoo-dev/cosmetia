@@ -3,7 +3,6 @@ import Link from "next/link";
 import RenderWhen from "./render-when";
 import { LoginDialog } from "./auth/login-dialog";
 
-
 export async function Navigation() {
 	const currentUser = await getCurrentUserAction();
 	return (

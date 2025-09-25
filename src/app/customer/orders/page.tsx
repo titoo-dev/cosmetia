@@ -2,6 +2,8 @@ import { getCustomerOrdersAction } from "@/actions/customer/orders/get-customer-
 import { OrderEntity } from "@/lib/types/types";
 import OrdersClient from "./orders-client";
 
+export const dynamic = 'force-dynamic'
+
 export default async function OrdersPage() {
   const result = await getCustomerOrdersAction();
   
