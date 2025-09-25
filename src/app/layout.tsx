@@ -39,7 +39,6 @@ export default function RootLayout({
           color="var(--primary)"
         />
         <QueryProvider>
-    			<Header />
           {children}
         </QueryProvider>
         <Footer />
