@@ -4,7 +4,7 @@ import "./globals.css";
 import { Footer } from "@/components/footer";
 import NextTopLoader from 'nextjs-toploader';
 import { QueryProvider } from "@/components/auth/query-provider";
-import { Header } from "@/components/header";
+import { Toaster } from "sonner";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -42,6 +42,7 @@ export default function RootLayout({
           {children}
         </QueryProvider>
         <Footer />
+        <Toaster />
       </body>
     </html>
   );
