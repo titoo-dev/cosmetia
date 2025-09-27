@@ -225,9 +225,11 @@ export default function ProductsClient({ products, searchParams, categories, fun
 
             {/* Order with Assistance Button */}
             <div className="fixed bottom-6 right-6 flex items-center space-x-3">
-                <Button className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-lg shadow-lg">
-                    Commander avec assistance
-                </Button>
+                <Link href="/customer/order/new">
+                    <Button className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-lg shadow-lg">
+                        Commander avec assistance
+                    </Button>
+                </Link>
                 <Button className="bg-green-700 hover:bg-green-800 text-white p-3 rounded-full shadow-lg">
                     <MessageCircle className="w-5 h-5" />
                 </Button>
