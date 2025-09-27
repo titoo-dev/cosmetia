@@ -3,6 +3,8 @@ import Link from "next/link";
 import RenderWhen from "./render-when";
 import { LoginDialog } from "./auth/login-dialog";
 
+import { UserMenu } from "./user-menu";
+
 export async function Navigation() {
 	const currentUser = await getCurrentUserAction();
 	return (
@@ -28,12 +30,17 @@ export async function Navigation() {
 			<RenderWhen condition={!currentUser}>
 				<LoginDialog />
 			</RenderWhen>
-			<Link
-				href="/customer/register"
-				className="bg-[#166970] text-white px-6 py-2 rounded-lg hover:bg-[#145a61] transition-colors inline-block"
-			>
-				Créer un compte
-			</Link>
+			<RenderWhen condition={!currentUser}>
+				<Link
+					href="/customer/register"
+					className="bg-[#166970] text-white px-6 py-2 rounded-lg hover:bg-[#145a61] transition-colors inline-block"
+				>
+					Créer un compte
+				</Link>
+			</RenderWhen>
+			<RenderWhen condition={!!currentUser}>
+				<UserMenu user={currentUser} />
+			</RenderWhen>
 		</nav>
 	);
 }
