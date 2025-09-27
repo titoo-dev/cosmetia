@@ -1,7 +1,6 @@
 "use server";
 
 import { saveTokens } from "@/lib/cookies-storage";
-import { SessionToken } from "@/lib/types/types";
 import { z } from "zod";
 
 const signinSchema = z.object({
@@ -37,20 +36,24 @@ export async function signinAction(prevState: unknown, formData: FormData) {
       }),
     });
 
-    const data: SessionToken = await response.json();
+    const data = await response.json();
 
-    if (data.access_token && data.refresh_token) {
+    if (data?.access_token && data?.refresh_token) {
       await saveTokens({
         accessToken: data.access_token,
         refreshToken: data.refresh_token,
       });
-    }
 
-    return {
-      success: true,
-      message: "Connexion réussie",
-      data,
-    };
+      return {
+        success: true,
+        message: "Connexion réussie",
+        data,
+      };
+    } else {
+      return {
+        error: "Token d'accès manquant dans la réponse",
+      };
+    }
   } catch (error) {
     console.error(error);
     return {

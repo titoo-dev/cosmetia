@@ -3,7 +3,6 @@
 import { ReactNode } from "react";
 import CustomerNavbar from "@/components/customer/navbar";
 import { usePathname } from "next/navigation";
-import { Toaster } from "sonner";
 import RenderWhen from "@/components/render-when";
 
 interface CustomerLayoutProps {
@@ -27,7 +26,6 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
         <CustomerNavbar />
       </RenderWhen>
       <main>{children}</main>
-      <Toaster />
     </div>
   );
 }

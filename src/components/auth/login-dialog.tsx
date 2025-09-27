@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
 	Dialog,
 	DialogContent,
@@ -10,7 +9,6 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { LoginForm } from './login-form';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { ReactNode, isValidElement } from 'react';
 
@@ -19,28 +17,9 @@ type LoginDialogProps = {
 	 * Optional custom trigger component. If not provided, a default login button is used.
 	 */
 	trigger?: ReactNode;
-	/**
-	 * Optional callback to execute after successful login
-	 */
-	onLoginSuccess?: () => void | Promise<void>;
 };
 
-export function LoginDialog({ trigger, onLoginSuccess }: LoginDialogProps) {
-	const [isLoginOpen, setIsLoginOpen] = useState(false);
-	const queryClient = useQueryClient();
-
-	const handleSuccess = async () => {
-		setIsLoginOpen(false);
-		await queryClient.invalidateQueries({
-			queryKey: ['currentUser'],
-		});
-
-		// Execute the callback if provided
-		if (onLoginSuccess) {
-			await onLoginSuccess();
-		}
-	};
-
+export function LoginDialog({ trigger }: LoginDialogProps) {
 	const defaultTrigger = (
 		<Button
 			variant="outline"
@@ -59,7 +38,7 @@ export function LoginDialog({ trigger, onLoginSuccess }: LoginDialogProps) {
 		trigger && isValidElement(trigger) ? trigger : defaultTrigger;
 
 	return (
-		<Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+		<Dialog>
 			<DialogTrigger asChild>{triggerElement}</DialogTrigger>
 			<DialogContent className="sm:max-w-md bg-white border-0 shadow-lg">
 				<DialogHeader className="text-center space-y-2 pb-4">
@@ -70,9 +49,7 @@ export function LoginDialog({ trigger, onLoginSuccess }: LoginDialogProps) {
 						Bienvenue à nouveau parmi nous sur Cosmetia
 					</p>
 				</DialogHeader>
-				<LoginForm
-					onSuccess={handleSuccess}
-				/>
+				<LoginForm />
 			</DialogContent>
 		</Dialog>
 	);

@@ -3,32 +3,49 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from './password-input';
-import { useActionState, useEffect } from 'react';
-import { toast } from 'sonner';
+import { useState, useTransition } from 'react';
 import { signinAction } from '@/actions/signin-action';
 import { Label } from '../ui/label';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-type LoginFormProps = {
-	onSuccess?: () => void;
-};
+export function LoginForm() {
+	const [isPending, startTransition] = useTransition();
+	const [errors, setErrors] = useState<{ email?: string[]; password?: string[] }>({});
+	const router = useRouter();
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
-	const [state, formAction, isPending] = useActionState(signinAction, {
-		error: '',
-	});
-
-	// Handle success/error based on state changes
-	useEffect(() => {
-		if (state.success) {
-			toast.success('Login successful');
-			onSuccess?.();
-		} else if (state.error) {
-			toast.error(state.error);
-		}
-	}, [state, onSuccess]);
+	const handleSubmit = async (formData: FormData) => {
+		startTransition(async () => {
+			try {
+				const result = await signinAction(null, formData);
+				
+				if (result.success) {
+					toast.success('Login successful');
+					router.push('/customer/marketplace');
+					return;
+				}
+				
+				if (result.error) {
+					toast.error(result.error);
+					setErrors({});
+					return;
+				}
+				
+				if (result.errors) {
+					setErrors(result.errors);
+					if (result.message) {
+						toast.error(result.message);
+					}
+					return;
+				}
+			} catch (error) {
+				toast.error('An unexpected error occurred');
+			}
+		});
+	};
 
 	return (
-		<form action={formAction} className="space-y-6">
+		<form action={handleSubmit} className="space-y-6">
 			<div className="space-y-2">
 				<Label htmlFor="email">
 					Email *
@@ -38,11 +55,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 					name="email"
 					type="email"
 					placeholder="votre@email.com"
-					className={state.errors?.email ? "border-red-500" : ""}
+					className={errors?.email ? "border-red-500" : ""}
 					disabled={isPending}
 				/>
-				{state.errors?.email && (
-					<p className="text-sm text-red-600">{state.errors.email}</p>
+				{errors?.email && (
+					<p className="text-sm text-red-600">{errors.email[0]}</p>
 				)}
 			</div>
 
@@ -51,11 +68,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 					Mot de passe *
 				</Label>
 				<PasswordInput 
-					className={state.errors?.password ? "border-red-500" : ""}
+					className={errors?.password ? "border-red-500" : ""}
 					disabled={isPending} 
 				/>
-				{state.errors?.password && (
-					<p className="text-sm text-red-600">{state.errors.password}</p>
+				{errors?.password && (
+					<p className="text-sm text-red-600">{errors.password[0]}</p>
 				)}
 			</div>
 

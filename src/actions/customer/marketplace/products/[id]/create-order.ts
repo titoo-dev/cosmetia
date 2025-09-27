@@ -46,8 +46,12 @@ export async function createOrderAction(prevState: unknown, formData: FormData) 
         "Authorization": `Bearer ${tokens.accessToken}`,
       },
       body: JSON.stringify({
-        productId: validatedFields.data.productId,
-        quantity: validatedFields.data.quantity,
+        orderItems: [
+          {
+            productId: validatedFields.data.productId,
+            quantity: validatedFields.data.quantity,
+          }
+        ],
       }),
     });
 
