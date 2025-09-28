@@ -43,13 +43,13 @@ export async function updateCustomerInfoAction(prevState: unknown, formData: For
         }
 
         const formDataToSend = new FormData();
-        if (validatedFields.data.companyName) {
+        if (validatedFields.data.companyName && validatedFields.data.companyName.trim() !== "") {
             formDataToSend.append("companyName", validatedFields.data.companyName);
         }
         formDataToSend.append("nameOfContact", validatedFields.data.nameOfContact);
         formDataToSend.append("phoneNumber", validatedFields.data.phoneNumber);
         formDataToSend.append("purchaseObjective", validatedFields.data.purchaseObjective);
-        if (validatedFields.data.picture) {
+        if (validatedFields.data.picture && validatedFields.data.picture.trim() !== "") {
             formDataToSend.append("picture", validatedFields.data.picture);
         }
 
@@ -63,6 +63,12 @@ export async function updateCustomerInfoAction(prevState: unknown, formData: For
 
         const data = await response.json();
 
+        if (!response.ok) {
+            console.error('API Error:', data);
+            return {
+                error: data.message || `Erreur ${response.status}: ${response.statusText}`,
+            };
+        }
 
         console.log('USER INFO UPDATED', data);
 

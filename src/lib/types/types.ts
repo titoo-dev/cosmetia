@@ -151,7 +151,7 @@ export interface CustomerUserEntity {
   nameOfContact: string;
   phoneNumber: string;
   purchaseObjective: string;
-  pictureId?: string;
+  pictureUrl?: string;
   productsFavorite: ProductEntity[];
   documentsFavorite: DocumentEntity[];
   orders: OrderEntity[];
