@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Download, X } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Search, Filter, Download, X, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import * as XLSX from 'xlsx';
 import { OrderEntity, OrderStatus } from "@/lib/types/types";
+import { deleteCustomerOrderAction } from "@/actions/customer/orders/[id]/delete-customer-order-action";
 
 interface OrdersClientProps {
   orders: OrderEntity[];
@@ -18,6 +21,8 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "ALL">("ALL");
   const [showFilters, setShowFilters] = useState(false);
+  const [ordersList, setOrdersList] = useState(orders);
+  const [isPending, startTransition] = useTransition();
 
   const getStatusBadgeStyle = (status: OrderStatus) => {
     switch (status) {
@@ -59,7 +64,7 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
     });
   };
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = ordersList.filter(order => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = (
       order.reference.toLowerCase().includes(searchLower) ||
@@ -70,6 +75,23 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
     
     return matchesSearch && matchesStatus;
   });
+
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      // Optimistic update - remove from UI immediately
+      setOrdersList(prev => prev.filter(order => order.id !== orderId));
+      
+      startTransition(async () => {
+        await deleteCustomerOrderAction(orderId);
+        toast.success("Commande supprimée avec succès");
+      });
+    } catch (error) {
+      // Revert optimistic update on error
+      setOrdersList(orders);
+      toast.error("Erreur lors de la suppression de la commande");
+      console.error("Error deleting order:", error);
+    }
+  };
 
   const exportToExcel = () => {
     // Prepare data for export
@@ -262,12 +284,13 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Quantité</TableHead>
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Coût estimé</TableHead>
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Status</TableHead>
+                <TableHead className="font-semibold text-gray-900 py-4 px-6">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOrders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-8 px-6 text-center text-gray-500">
+                  <TableCell colSpan={7} className="py-8 px-6 text-center text-gray-500">
                     Aucune commande trouvée
                   </TableCell>
                 </TableRow>
@@ -294,6 +317,42 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
                       >
                         {getStatusLabel(order.status)}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="py-4 px-6">
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                            disabled={isPending}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Êtes-vous sûr de vouloir supprimer cette commande ? Cette action ne peut pas être annulée.
+                              <br />
+                              <br />
+                              <strong>Référence:</strong> {order.reference}
+                              <br />
+                              <strong>Produit(s):</strong> {order.orderItems.map((item) => item.product.name).join(', ')}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteOrder(order.id)}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Supprimer
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))
