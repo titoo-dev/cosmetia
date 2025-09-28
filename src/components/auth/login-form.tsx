@@ -21,7 +21,7 @@ export function LoginForm() {
 				
 				if (result.success) {
 					toast.success('Login successful');
-					router.push('/customer/marketplace');
+					router.push('/marketplace');
 					return;
 				}
 				

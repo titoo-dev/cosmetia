@@ -2,23 +2,21 @@ import { getCurrentUserAction } from "@/actions/get-current-user-action";
 import Link from "next/link";
 import RenderWhen from "./render-when";
 import { LoginDialog } from "./auth/login-dialog";
-
 import { UserMenu } from "./user-menu";
+import { NavigationLinks } from "./navigation-links";
 
 export async function Navigation() {
 	const currentUser = await getCurrentUserAction();
 
-	console.log('currentUser', currentUser);
-	
 	const navigationLinks = [
-		{ href: "/customer/marketplace", label: "Marketplace" },
+		{ href: "/marketplace", label: "Marketplace" },
 		{ href: "/suppliers", label: "Fournisseurs" },
 		{ href: "/pricing", label: "Tarifs" }
 	];
 
 	const customerNavigationLinks = [
-        { href: "/customer/marketplace", label: "Marketplace" },
-        { href: "/customer/suppliers", label: "Fournisseurs" },
+        { href: "/marketplace", label: "Marketplace" },
+        { href: "/suppliers", label: "Fournisseurs" },
         { href: "/customer/orders", label: "Devis" },
         { href: "/customer/statistics", label: "Statistiques" },
     ];
@@ -27,15 +25,7 @@ export async function Navigation() {
 
 	return (
 		<nav className="hidden md:flex items-center space-x-8">
-			{currentNavigationLinks.map((link) => (
-				<Link
-					key={link.href}
-					href={link.href}
-					className="text-gray-600 hover:text-[#166970] transition-colors"
-				>
-					{link.label}
-				</Link>
-			))}
+			<NavigationLinks links={currentNavigationLinks} />
 			<RenderWhen condition={!currentUser}>
 				<LoginDialog />
 			</RenderWhen>
