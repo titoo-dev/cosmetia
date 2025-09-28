@@ -51,7 +51,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                         {/* Product Header */}
                         <div className="bg-white rounded-lg shadow-sm p-6">
                             <h1 className="text-3xl font-bold text-gray-900 mb-6">
-                                {product.tradeName}
+                                {product.name}
                             </h1>
                             
                             {/* Product Image */}
@@ -59,7 +59,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                                 {product.pictureUrl ? (
                                     <Image
                                         src={product.pictureUrl}
-                                        alt={product.tradeName}
+                                        alt={product.name}
                                         width={400}
                                         height={256}
                                         className="w-full h-full object-cover rounded-lg"
@@ -69,7 +69,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                                         <div className="w-32 h-32 bg-gray-300 rounded-lg mx-auto mb-4 flex items-center justify-center">
                                             <span className="text-gray-500 text-sm">Product Image</span>
                                         </div>
-                                        <p className="text-sm text-gray-500">{product.tradeName}</p>
+                                        <p className="text-sm text-gray-500">{product.name}</p>
                                     </div>
                                 )}
                             </div>

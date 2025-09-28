@@ -143,7 +143,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
                                     {product.pictureUrl ? (
                                         <Image
                                             src={product.pictureUrl}
-                                            alt={product.tradeName}
+                                            alt={product.name}
                                             fill
                                             className="object-cover"
                                         />
@@ -176,7 +176,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
 
                                 {/* Product Name */}
                                 <h3 className="font-bold text-lg text-gray-900 mb-2 px-4">
-                                    {product.tradeName}
+                                    {product.name}
                                 </h3>
 
                                 {/* Description */}
