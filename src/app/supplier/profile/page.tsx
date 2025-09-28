@@ -20,7 +20,7 @@ export default function SupplierProfilePage() {
     const [supplierData, setSupplierData] = useState<SupplierUserEntity | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [state, formAction, isPending] = useActionState(updateSupplierInfoAction, {
-        errors: {} as any,
+        errors: {} as Record<string, string[]>,
         message: "",
     });
     const formRef = useRef<HTMLFormElement>(null);
@@ -161,12 +161,12 @@ export default function SupplierProfilePage() {
                             type="text"
                             placeholder="Entrez le nom de votre société"
                             defaultValue={supplierData?.companyName || ""}
-                            className={`pl-10 ${(state.errors as any)?.companyName?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.companyName?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                         />
                     </div>
-                    {(state.errors as any)?.companyName?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).companyName[0]}</p>
+                    {state.errors?.companyName?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.companyName[0]}</p>
                     )}
                 </div>
 
@@ -183,13 +183,13 @@ export default function SupplierProfilePage() {
                             type="text"
                             placeholder="123 456 789 00012"
                             defaultValue={supplierData?.siretNumber || ""}
-                            className={`pl-10 ${(state.errors as any)?.siretNumber?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.siretNumber?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                             required
                         />
                     </div>
-                    {(state.errors as any)?.siretNumber?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).siretNumber[0]}</p>
+                    {state.errors?.siretNumber?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.siretNumber[0]}</p>
                     )}
                 </div>
 
@@ -206,13 +206,13 @@ export default function SupplierProfilePage() {
                             type="text"
                             placeholder="Prénom Nom"
                             defaultValue={supplierData?.nameOfContact || ""}
-                            className={`pl-10 ${(state.errors as any)?.nameOfContact?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.nameOfContact?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                             required
                         />
                     </div>
-                    {(state.errors as any)?.nameOfContact?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).nameOfContact[0]}</p>
+                    {state.errors?.nameOfContact?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.nameOfContact[0]}</p>
                     )}
                 </div>
 
@@ -229,13 +229,13 @@ export default function SupplierProfilePage() {
                             type="tel"
                             placeholder="+33 6 12 34 56 78"
                             defaultValue={supplierData?.phoneNumber || ""}
-                            className={`pl-10 ${(state.errors as any)?.phoneNumber?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.phoneNumber?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                             required
                         />
                     </div>
-                    {(state.errors as any)?.phoneNumber?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).phoneNumber[0]}</p>
+                    {state.errors?.phoneNumber?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.phoneNumber[0]}</p>
                     )}
                 </div>
 
@@ -252,12 +252,12 @@ export default function SupplierProfilePage() {
                             type="url"
                             placeholder="https://www.exemple.com"
                             defaultValue={supplierData?.website || ""}
-                            className={`pl-10 ${(state.errors as any)?.website?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.website?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                         />
                     </div>
-                    {(state.errors as any)?.website?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).website[0]}</p>
+                    {state.errors?.website?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.website[0]}</p>
                     )}
                 </div>
 
@@ -271,19 +271,19 @@ export default function SupplierProfilePage() {
                         name="activityDescription"
                         placeholder="Décrivez votre activité et vos produits/services"
                         defaultValue={supplierData?.activityDescription || ""}
-                        className={`min-h-[100px] resize-none ${(state.errors as any)?.activityDescription?.[0] ? "border-red-500" : ""}`}
+                        className={`min-h-[100px] resize-none ${state.errors?.activityDescription?.[0] ? "border-red-500" : ""}`}
                         disabled={isPending}
                         required
                     />
-                    {(state.errors as any)?.activityDescription?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).activityDescription[0]}</p>
+                    {state.errors?.activityDescription?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.activityDescription[0]}</p>
                     )}
                 </div>
 
                 {/* General Error Display */}
-                {(state.errors as any)?.general?.[0] && (
+                {(state.errors as Record<string, string[]>)['general']?.[0] && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                        <p className="text-sm text-red-600">{(state.errors as any).general[0]}</p>
+                        <p className="text-sm text-red-600">{(state.errors as Record<string, string[]>)['general'][0]}</p>
                     </div>
                 )}
 

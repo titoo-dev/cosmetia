@@ -20,7 +20,7 @@ export default function CustomerProfilePage() {
     const [customerData, setCustomerData] = useState<CustomerUserEntity | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [state, formAction, isPending] = useActionState(updateCustomerInfoAction, {
-        errors: {} as any,
+        errors: {} as Record<string, string[]>,
         message: "",
     });
     const formRef = useRef<HTMLFormElement>(null);
@@ -161,13 +161,13 @@ export default function CustomerProfilePage() {
                             type="text"
                             placeholder="Prénom Nom"
                             defaultValue={customerData?.nameOfContact || ""}
-                            className={`pl-10 ${(state.errors as any)?.nameOfContact?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.nameOfContact?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                             required
                         />
                     </div>
-                    {(state.errors as any)?.nameOfContact?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).nameOfContact[0]}</p>
+                    {state.errors?.nameOfContact?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.nameOfContact[0]}</p>
                     )}
                 </div>
 
@@ -184,12 +184,12 @@ export default function CustomerProfilePage() {
                             type="text"
                             placeholder="Nom de votre société"
                             defaultValue={customerData?.companyName || ""}
-                            className={`pl-10 ${(state.errors as any)?.companyName?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.companyName?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                         />
                     </div>
-                    {(state.errors as any)?.companyName?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).companyName[0]}</p>
+                    {state.errors?.companyName?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.companyName[0]}</p>
                     )}
                 </div>
 
@@ -206,13 +206,13 @@ export default function CustomerProfilePage() {
                             type="tel"
                             placeholder="+33 6 12 34 56 78"
                             defaultValue={customerData?.phoneNumber || ""}
-                            className={`pl-10 ${(state.errors as any)?.phoneNumber?.[0] ? "border-red-500" : ""}`}
+                            className={`pl-10 ${state.errors?.phoneNumber?.[0] ? "border-red-500" : ""}`}
                             disabled={isPending}
                             required
                         />
                     </div>
-                    {(state.errors as any)?.phoneNumber?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).phoneNumber[0]}</p>
+                    {state.errors?.phoneNumber?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.phoneNumber[0]}</p>
                     )}
                 </div>
 
@@ -222,7 +222,7 @@ export default function CustomerProfilePage() {
                         Objectif d'achat *
                     </Label>
                     <Select name="purchaseObjective" required disabled={isPending} defaultValue={customerData?.purchaseObjective || ""}>
-                        <SelectTrigger className={`w-full ${(state.errors as any)?.purchaseObjective?.[0] ? "border-red-500" : ""}`}>
+                        <SelectTrigger className={`w-full ${state.errors?.purchaseObjective?.[0] ? "border-red-500" : ""}`}>
                             <SelectValue placeholder="Sélectionnez votre objectif d'achat" />
                         </SelectTrigger>
                         <SelectContent>
@@ -235,15 +235,15 @@ export default function CustomerProfilePage() {
                             <SelectItem value="other">Autre</SelectItem>
                         </SelectContent>
                     </Select>
-                    {(state.errors as any)?.purchaseObjective?.[0] && (
-                        <p className="text-sm text-red-600">{(state.errors as any).purchaseObjective[0]}</p>
+                    {state.errors?.purchaseObjective?.[0] && (
+                        <p className="text-sm text-red-600">{state.errors.purchaseObjective[0]}</p>
                     )}
                 </div>
 
                 {/* General Error Display */}
-                {(state.errors as any)?.general?.[0] && (
+                {(state.errors as Record<string, string[]>)['general']?.[0] && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                        <p className="text-sm text-red-600">{(state.errors as any).general[0]}</p>
+                        <p className="text-sm text-red-600">{(state.errors as Record<string, string[]>)['general'][0]}</p>
                     </div>
                 )}
 
