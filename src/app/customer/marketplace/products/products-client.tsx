@@ -143,7 +143,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
                                     {product.pictureUrl ? (
                                         <Image
                                             src={product.pictureUrl}
-                                            alt={product.name}
+                                            alt={product.name || "Product Image"}
                                             fill
                                             className="object-cover"
                                         />
