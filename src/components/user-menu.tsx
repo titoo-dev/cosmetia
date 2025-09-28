@@ -64,7 +64,7 @@ export function UserMenu({ user }: UserMenuProps) {
 						{/* User Name */}
 						<div className="text-center">
 							<h3 className="text-lg font-bold text-black">
-								{user?.supplier?.companyName || user?.customer?.companyName || 'Guest'}
+								{user?.customer?.nameOfContact || 'Guest'}
 							</h3>
 							<p className="text-sm text-gray-600 mt-1">
 								{user?.email || 'Guest'}
