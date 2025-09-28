@@ -7,26 +7,33 @@ import { UserMenu } from "./user-menu";
 
 export async function Navigation() {
 	const currentUser = await getCurrentUserAction();
+	
+	const navigationLinks = [
+		{ href: "/customer/marketplace", label: "Marketplace" },
+		{ href: "/suppliers", label: "Fournisseurs" },
+		{ href: "/pricing", label: "Tarifs" }
+	];
+
+	const customerNavigationLinks = [
+        { href: "/customer/marketplace", label: "Marketplace" },
+        { href: "/customer/suppliers", label: "Fournisseurs" },
+        { href: "/customer/orders", label: "Devis" },
+        { href: "/customer/statistics", label: "Statistiques" },
+    ];
+
+	const currentNavigationLinks = currentUser ? customerNavigationLinks : navigationLinks;
+
 	return (
 		<nav className="hidden md:flex items-center space-x-8">
-			<Link
-				href="/customer/marketplace"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Marketplace
-			</Link>
-			<Link
-				href="/suppliers"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Fournisseurs
-			</Link>
-			<Link
-				href="/pricing"
-				className="text-gray-600 hover:text-[#166970] transition-colors"
-			>
-				Tarifs
-			</Link>
+			{currentNavigationLinks.map((link) => (
+				<Link
+					key={link.href}
+					href={link.href}
+					className="text-gray-600 hover:text-[#166970] transition-colors"
+				>
+					{link.label}
+				</Link>
+			))}
 			<RenderWhen condition={!currentUser}>
 				<LoginDialog />
 			</RenderWhen>
