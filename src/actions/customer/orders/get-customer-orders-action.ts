@@ -23,6 +23,8 @@ export async function getCustomerOrdersAction() {
 
     const orders: OrderEntity[] = await response.json();
 
+    console.log('orders', JSON.stringify(orders, null, 2));
+
     return {
       success: true,
       data: orders,

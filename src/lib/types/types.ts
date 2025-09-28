@@ -78,7 +78,7 @@ export interface UserEntity {
 export interface ProductEntity {
   id: string;
   id_seq: number;
-  tradeName: string;
+  name: string;
   description: string;
   pictureUrl?: string;
   inciName: string;

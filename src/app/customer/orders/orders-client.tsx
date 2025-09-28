@@ -59,8 +59,7 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
     const searchLower = searchTerm.toLowerCase();
     return (
       order.reference.toLowerCase().includes(searchLower) ||
-      order.finalResultName.toLowerCase().includes(searchLower) ||
-      order.finalResultFamily.toLowerCase().includes(searchLower)
+      order.orderItems.map((item) => item.product.name).join(', ').toLowerCase().includes(searchLower)
     );
   });
 
@@ -108,8 +107,7 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
             <TableHeader>
               <TableRow className="border-b border-gray-200">
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Date</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Référence</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Produit final</TableHead>
+                <TableHead className="font-semibold text-gray-900 py-4 px-6">Produit</TableHead>
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Quantité</TableHead>
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Coût estimé</TableHead>
                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Status</TableHead>
@@ -128,17 +126,13 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
                     <TableCell className="py-4 px-6 text-gray-700">
                       {formatDate(order.createdAt)}
                     </TableCell>
-                    <TableCell className="py-4 px-6 text-gray-700 font-medium">
-                      {order.reference}
-                    </TableCell>
                     <TableCell className="py-4 px-6 text-gray-700">
                       <div>
-                        <div className="font-medium">{order.finalResultName}</div>
-                        <div className="text-sm text-gray-500">{order.finalResultFamily}</div>
+                        <div className="font-medium">{order.orderItems.map((item) => item.product.name).join(', ')}</div>
                       </div>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-gray-700">
-                      {order.finalResultQuantity} L
+                      {order.orderItems[0].quantity} Kg
                     </TableCell>
                     <TableCell className="py-4 px-6 text-gray-700">
                       {order.estimatedTotalCost.toFixed(2)} €
