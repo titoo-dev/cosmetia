@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, Download } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Filter, Download, X } from "lucide-react";
 import { OrderEntity, OrderStatus } from "@/lib/types/types";
 
 interface OrdersClientProps {
@@ -14,6 +15,8 @@ interface OrdersClientProps {
 
 export default function OrdersClient({ orders }: OrdersClientProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | "ALL">("ALL");
+  const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadgeStyle = (status: OrderStatus) => {
     switch (status) {
@@ -57,10 +60,14 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
 
   const filteredOrders = orders.filter(order => {
     const searchLower = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = (
       order.reference.toLowerCase().includes(searchLower) ||
       order.orderItems.map((item) => item.product.name).join(', ').toLowerCase().includes(searchLower)
     );
+    
+    const matchesStatus = statusFilter === "ALL" || order.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
   });
 
   return (
@@ -87,7 +94,11 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
               </div>
               
               {/* Filter Button */}
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => setShowFilters(!showFilters)}
+              >
                 <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filtrer</span>
               </Button>
@@ -100,6 +111,48 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
             </div>
           </div>
         </div>
+
+        {/* Filters Section */}
+        {showFilters && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Filtrer par statut
+                </label>
+                <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as OrderStatus | "ALL")}>
+                  <SelectTrigger className="w-full sm:w-64">
+                    <SelectValue placeholder="Sélectionner un statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">Tous les statuts</SelectItem>
+                    <SelectItem value={OrderStatus.FORMULA_PENDING}>En attente</SelectItem>
+                    <SelectItem value={OrderStatus.FORMULA_ACCEPTED}>Formule acceptée</SelectItem>
+                    <SelectItem value={OrderStatus.FORMULA_REJECTED}>Formule rejetée</SelectItem>
+                    <SelectItem value={OrderStatus.CANCELLED}>Annulé</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Clear Filters */}
+              {(statusFilter !== "ALL" || searchTerm) && (
+                <div className="flex items-end">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => {
+                      setStatusFilter("ALL");
+                      setSearchTerm("");
+                    }}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+                  >
+                    <X className="w-4 h-4" />
+                    Effacer les filtres
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Table Section */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
