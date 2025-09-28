@@ -7,6 +7,8 @@ import { UserMenu } from "./user-menu";
 
 export async function Navigation() {
 	const currentUser = await getCurrentUserAction();
+
+	console.log('currentUser', currentUser);
 	
 	const navigationLinks = [
 		{ href: "/customer/marketplace", label: "Marketplace" },

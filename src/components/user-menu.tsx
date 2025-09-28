@@ -1,6 +1,6 @@
 'use client';
 import { LogOut, Loader2, Star, Settings } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,11 +10,11 @@ import {
 import Link from 'next/link';
 import { useTransition } from 'react';
 import { logout } from '@/actions/logout';
-import { UserEntity } from '@/lib/types/types';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
+import { CurrentUser } from '@/actions/get-current-user-action';
 
 type UserMenuProps = {
-	user: UserEntity | null;
+	user: CurrentUser | null;
 };
 
 export function UserMenu({ user }: UserMenuProps) {
@@ -35,11 +35,16 @@ export function UserMenu({ user }: UserMenuProps) {
 		});
 	};
 
+	const userName = user?.customer?.nameOfContact || user?.supplier?.nameOfContact || 'Guest';
+	const userEmail = user?.email || 'Guest';
+	const userPicture = user?.customer?.pictureUrl || user?.supplier?.pictureUrl || 'Guest';
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<button className="relative h-8 w-8 rounded-full ring-offset-background transition-all hover:ring-2 hover:ring-ring hover:ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
 					<Avatar className="h-8 w-8">
+						<AvatarImage src={userPicture} alt={userName} className='object-cover' />
 						<AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
 							{userInitials}
 						</AvatarFallback>
@@ -51,23 +56,20 @@ export function UserMenu({ user }: UserMenuProps) {
 				<div className="bg-[#F8F7F5] px-6 py-8 rounded-t-lg">
 					<div className="flex flex-col items-center space-y-4">
 						{/* Logo/Avatar */}
-						<div className="relative">
-							<div className="w-16 h-16 bg-[#34A853] rounded-lg flex items-center justify-center shadow-sm">
-								<div className="w-8 h-8 text-white">
-									<svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-										<path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
-									</svg>
-								</div>
-							</div>
-						</div>
+						<Avatar className="w-16 h-16">
+							<AvatarImage src={userPicture} alt={userName} className='object-cover' />
+							<AvatarFallback className="bg-[#34A853] text-white text-lg font-semibold">
+								{userInitials}
+							</AvatarFallback>
+						</Avatar>
 						
 						{/* User Name */}
 						<div className="text-center">
 							<h3 className="text-lg font-bold text-black">
-								{user?.customer?.nameOfContact || 'Guest'}
+								{userName}
 							</h3>
 							<p className="text-sm text-gray-600 mt-1">
-								{user?.email || 'Guest'}
+								{userEmail}
 							</p>
 						</div>
 					</div>

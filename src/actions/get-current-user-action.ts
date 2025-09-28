@@ -1,10 +1,17 @@
 'use server'
 
 import { getAccessToken } from '@/lib/cookies-storage';
-import { UserEntity } from '@/lib/types/types';
+import { CustomerUserEntity, ProviderUserEntity, SupplierUserEntity, UserEntity } from '@/lib/types/types';
 
 
-export async function getCurrentUserAction(): Promise<UserEntity | null> {
+export type CurrentUser = UserEntity & {
+  customer?: CustomerUserEntity;
+  supplier?: SupplierUserEntity;
+};
+
+
+
+export async function getCurrentUserAction(): Promise<CurrentUser | null> {
     try {
         const accessToken = await getAccessToken();
         
@@ -26,9 +33,37 @@ export async function getCurrentUserAction(): Promise<UserEntity | null> {
             return null;
         }
 
-        const data: UserEntity = await response.json();
+        const data: CurrentUser = await response.json();
 
-        console.log(data);
+        if (data.role === 'CUSTOMER') {
+            const customerResponse = await fetch(`${process.env.API_BASE_URL}/customer/customer`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (customerResponse.status === 200) {
+                const customerData = await customerResponse.json();
+                data.customer = customerData;
+            }
+        } else if (data.role === 'SUPPLIER') {
+            const supplierResponse = await fetch(`${process.env.API_BASE_URL}/supplier/supplier`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (supplierResponse.status === 200) {
+                const supplierData = await supplierResponse.json();
+                data.supplier = supplierData;
+            }
+        }
 
         return data;
     } catch (error) {
