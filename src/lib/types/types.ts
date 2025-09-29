@@ -96,6 +96,7 @@ export interface ProductEntity {
   createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
+  owner?: SupplierUserEntity;
 }
 
 export interface ProductCategoryEntity {
@@ -132,6 +133,7 @@ export interface SupplierUserEntity {
   userId: string;
   user: UserEntity;
   companyName: string;
+  picture?: string;
   siretNumber: string;
   nameOfContact: string;
   phoneNumber: string;

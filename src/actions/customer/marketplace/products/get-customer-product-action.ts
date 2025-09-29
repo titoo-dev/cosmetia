@@ -38,8 +38,6 @@ export async function getCustomerProducts(params?: {
 
         const products = await response.json();
 
-        console.log('PRODUCTS', products);
-
         return products;
     } catch (error) {
         console.error("Error fetching customer products:", error);

@@ -23,6 +23,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         getCountries()
     ]);
 
+    console.log('products', products);
+
     return (
         <ProductsClient 
             products={products}

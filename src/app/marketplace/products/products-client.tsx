@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ProductsClientProps {
     products: ProductEntity[];
@@ -158,12 +159,19 @@ export default function ProductsClient({ products, searchParams, categories, fun
                                 <div className="flex items-center justify-between mb-3 px-4">
                                     <div className="flex items-center space-x-2">
                                         <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                                            <span className="text-white text-xs font-bold">
-                                                {product.supplier?.companyName?.charAt(0) || 'N/A'}
-                                            </span>
+                                            <Avatar className="w-6 h-6">
+                                                <AvatarImage 
+                                                    src={product.owner?.picture} 
+                                                    alt={product.owner?.companyName || 'Company'}
+                                                    className="object-cover"
+                                                />
+                                                <AvatarFallback className="bg-blue-500 text-white text-xs font-bold uppercase">
+                                                    {product.owner?.companyName?.charAt(0) || 'N/A'}
+                                                </AvatarFallback>
+                                            </Avatar>
                                         </div>
                                         <span className="text-sm font-medium text-gray-700">
-                                            {product.supplier?.companyName || 'Unknown Supplier'}
+                                            {product.owner?.companyName || 'Unknown Supplier'}
                                         </span>
                                     </div>
                                     {product.certificate && (
