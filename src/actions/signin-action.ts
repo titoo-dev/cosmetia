@@ -8,7 +8,9 @@ const signinSchema = z.object({
   password: z.string().min(1, "Le mot de passe est requis"),
 });
 
-export async function signinAction(prevState: unknown, formData: FormData) {
+export async function signinAction(formData: FormData) {
+
+  console.log('signinAction');
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 

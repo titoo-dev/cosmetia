@@ -27,7 +27,7 @@ export async function Navigation() {
 		<nav className="hidden md:flex items-center space-x-8">
 			<NavigationLinks links={currentNavigationLinks} />
 			<RenderWhen condition={!currentUser}>
-				<LoginDialog />
+				<LoginDialog currentUser={currentUser} />
 			</RenderWhen>
 			<RenderWhen condition={!currentUser}>
 				<Link

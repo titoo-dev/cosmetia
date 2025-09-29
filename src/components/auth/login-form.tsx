@@ -8,20 +8,38 @@ import { signinAction } from '@/actions/signin-action';
 import { Label } from '../ui/label';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { CurrentUser } from '@/actions/get-current-user-action';
 
-export function LoginForm() {
+type LoginFormProps = {
+	currentUser: CurrentUser | null;
+}
+
+export function LoginForm({ currentUser }: LoginFormProps) {
 	const [isPending, startTransition] = useTransition();
 	const [errors, setErrors] = useState<{ email?: string[]; password?: string[] }>({});
 	const router = useRouter();
 
-	const handleSubmit = async (formData: FormData) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		console.log('handleSubmit');
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+
 		startTransition(async () => {
 			try {
-				const result = await signinAction(null, formData);
+				const result = await signinAction(formData);
 				
 				if (result.success) {
 					toast.success('Login successful');
-					router.push('/marketplace');
+					if (currentUser?.role === 'SUPPLIER') {
+						router.push('/supplier/dashboard');
+						return;
+					}
+
+					if (currentUser?.role === 'CUSTOMER') {
+						router.push('/marketplace');
+						return;
+					}
+
 					return;
 				}
 				
@@ -45,7 +63,7 @@ export function LoginForm() {
 	};
 
 	return (
-		<form action={handleSubmit} className="space-y-6">
+		<form onSubmit={handleSubmit} className="space-y-6">
 			<div className="space-y-2">
 				<Label htmlFor="email">
 					Email *

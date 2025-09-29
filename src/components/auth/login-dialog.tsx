@@ -11,15 +11,17 @@ import { Button } from '@/components/ui/button';
 import { LoginForm } from './login-form';
 
 import { ReactNode, isValidElement } from 'react';
+import { CurrentUser } from '@/actions/get-current-user-action';
 
 type LoginDialogProps = {
 	/**
 	 * Optional custom trigger component. If not provided, a default login button is used.
 	 */
 	trigger?: ReactNode;
+	currentUser: CurrentUser | null;
 };
 
-export function LoginDialog({ trigger }: LoginDialogProps) {
+export function LoginDialog({ trigger, currentUser }: LoginDialogProps) {
 	const defaultTrigger = (
 		<Button
 			variant="outline"
@@ -49,7 +51,7 @@ export function LoginDialog({ trigger }: LoginDialogProps) {
 						Bienvenue à nouveau parmi nous sur Cosmetia
 					</p>
 				</DialogHeader>
-				<LoginForm />
+				<LoginForm currentUser={currentUser} />
 			</DialogContent>
 		</Dialog>
 	);

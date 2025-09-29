@@ -11,6 +11,8 @@ export default async function Home() {
 
 	const currentUser = await getCurrentUserAction();
 
+	console.log('currentUser', currentUser);
+
 	if (currentUser) {
 		return redirect('/marketplace');
 	}
