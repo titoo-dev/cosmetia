@@ -126,6 +126,7 @@ export interface DocumentEntity {
   createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
+  owner?: SupplierUserEntity;
 }
 
 export interface SupplierUserEntity {

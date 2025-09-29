@@ -8,6 +8,7 @@ import { MessageCircle, Search } from "lucide-react";
 import { DocumentEntity, ProductCategoryEntity, ProductCountryEntity, ProductFunctionEntity } from "@/lib/types/types";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface DocumentsClientProps {
     documents: DocumentEntity[];
@@ -171,17 +172,22 @@ export default function DocumentsClient({
                                 <span className="text-xs font-medium text-gray-500 uppercase">
                                     Document
                                 </span>
-                                <div className={`w-8 h-8 ${getCompanyLogoColor(document.supplier?.companyName || 'Unknown')} rounded-full flex items-center justify-center`}>
-                                    <span className="text-white text-xs font-bold">
-                                        {getCompanyLogo(document.supplier?.companyName || 'Unknown')}
-                                    </span>
-                                </div>
+                                <Avatar className="w-8 h-8">
+                                    <AvatarImage 
+                                        src={document.owner?.picture} 
+                                        alt={document.owner?.companyName || 'Company'}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-blue-500 text-white text-xs font-bold uppercase">
+                                        {document.owner?.companyName?.charAt(0) || 'N/A'}
+                                    </AvatarFallback>
+                                </Avatar>
                             </div>
 
                             {/* Company Name */}
                             <div className="mb-3">
                                 <span className="text-sm font-medium text-gray-700">
-                                    {document.supplier?.companyName || 'Unknown Supplier'}
+                                    {document.owner?.companyName || 'Unknown Supplier'}
                                 </span>
                             </div>
 
