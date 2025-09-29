@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -50,20 +49,6 @@ const formatDate = (date: Date) => {
   }).format(new Date(date));
 };
 
-const getContextLabel = (context: LeadContext): string => {
-  switch (context) {
-    case LeadContext.VISIT_PROFILE:
-      return "Visite d'un profil";
-    case LeadContext.VISIT_PRODUCT:
-      return "Vue d'un produit";
-    case LeadContext.VISIT_DOCUMENT:
-      return "Lecture d'un document";
-    case LeadContext.RESEARCH_RESULT:
-      return "Résultat de la recherche";
-    default:
-      return "Activité inconnue";
-  }
-};
 
 const exportToExcel = (leads: LeadWithDetails[]) => {
   // Prepare data for export
@@ -157,11 +142,8 @@ interface DashboardClientProps {
 export function DashboardClient({ 
   initialStats, 
   initialLeads, 
-  initialTotal, 
   initialSearchQuery 
 }: DashboardClientProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [leadsList, setLeadsList] = useState(initialLeads);
   const [contextFilter, setContextFilter] = useState<LeadContext | "ALL">("ALL");
