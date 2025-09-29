@@ -15,13 +15,21 @@ export async function Navigation() {
 	];
 
 	const customerNavigationLinks = [
-        { href: "/marketplace", label: "Marketplace" },
-        { href: "/suppliers", label: "Fournisseurs" },
-        { href: "/customer/orders", label: "Devis" },
-        { href: "/customer/statistics", label: "Statistiques" },
-    ];
+		{ href: "/marketplace", label: "Marketplace" },
+		{ href: "/suppliers", label: "Fournisseurs" },
+		{ href: "/customer/orders", label: "Devis" },
+		{ href: "/customer/statistics", label: "Statistiques" },
+	];
 
-	const currentNavigationLinks = currentUser ? customerNavigationLinks : navigationLinks;
+
+	const supplierNavigationLinks = [
+		{ href: "/supplier/dashboard", label: "Dashboard" },
+		{ href: "/supplier/orders", label: "Devis" },
+		{ href: "/supplier/products", label: "Produits" },
+		{ href: "/supplier/statistics", label: "Statistiques" },
+	];
+
+	const currentNavigationLinks = currentUser ? currentUser.role === "CUSTOMER" ? customerNavigationLinks : supplierNavigationLinks : navigationLinks;
 
 	return (
 		<nav className="hidden md:flex items-center space-x-8">
