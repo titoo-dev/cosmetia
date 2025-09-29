@@ -27,6 +27,8 @@ import { toast } from "sonner";
 import * as XLSX from 'xlsx';
 import { DashboardStats } from "@/actions/supplier/dashboard/get-dashboard-stats-action";
 import { LeadWithDetails } from "@/actions/supplier/dashboard/get-supplier-leads-action";
+import { LeadContext } from "@/lib/types/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const getCompanyInitials = (companyName: string) => {
   return companyName
@@ -46,6 +48,21 @@ const formatDate = (date: Date) => {
     hour: "2-digit",
     minute: "2-digit"
   }).format(new Date(date));
+};
+
+const getContextLabel = (context: LeadContext): string => {
+  switch (context) {
+    case LeadContext.VISIT_PROFILE:
+      return "Visite d'un profil";
+    case LeadContext.VISIT_PRODUCT:
+      return "Vue d'un produit";
+    case LeadContext.VISIT_DOCUMENT:
+      return "Lecture d'un document";
+    case LeadContext.RESEARCH_RESULT:
+      return "Résultat de la recherche";
+    default:
+      return "Activité inconnue";
+  }
 };
 
 const exportToExcel = (leads: LeadWithDetails[]) => {
@@ -147,6 +164,8 @@ export function DashboardClient({
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [leadsList, setLeadsList] = useState(initialLeads);
+  const [contextFilter, setContextFilter] = useState<LeadContext | "ALL">("ALL");
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -154,6 +173,11 @@ export function DashboardClient({
 
   const clearSearch = () => {
     setSearchQuery("");
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setContextFilter("ALL");
   };
 
   const handleExport = () => {
@@ -176,7 +200,9 @@ export function DashboardClient({
       lead.ipAddress.toLowerCase().includes(searchLower)
     );
     
-    return matchesSearch;
+    const matchesContext = contextFilter === "ALL" || lead.context === contextFilter;
+    
+    return matchesSearch && matchesContext;
   });
 
   return (
@@ -279,6 +305,7 @@ export function DashboardClient({
               <Button 
                 variant="outline" 
                 className="flex items-center gap-2"
+                onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filtrer</span>
@@ -307,6 +334,45 @@ export function DashboardClient({
             </div>
           </div>
         </div>
+
+        {/* Filters Section */}
+        {showFilters && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Filtrer par contexte
+                </label>
+                <Select value={contextFilter} onValueChange={(value) => setContextFilter(value as LeadContext | "ALL")}>
+                  <SelectTrigger className="w-full sm:w-64">
+                    <SelectValue placeholder="Sélectionner un contexte" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">Tous les contextes</SelectItem>
+                    <SelectItem value={LeadContext.VISIT_PROFILE}>Visite d'un profil</SelectItem>
+                    <SelectItem value={LeadContext.VISIT_PRODUCT}>Vue d'un produit</SelectItem>
+                    <SelectItem value={LeadContext.VISIT_DOCUMENT}>Lecture d'un document</SelectItem>
+                    <SelectItem value={LeadContext.RESEARCH_RESULT}>Résultat de la recherche</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Clear Filters */}
+              {(contextFilter !== "ALL" || searchQuery) && (
+                <div className="flex items-end">
+                  <Button 
+                    variant="ghost" 
+                    onClick={clearAllFilters}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+                  >
+                    <X className="w-4 h-4" />
+                    Effacer les filtres
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Table Section */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
