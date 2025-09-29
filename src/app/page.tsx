@@ -12,7 +12,7 @@ export default async function Home() {
 	const currentUser = await getCurrentUserAction();
 
 	if (currentUser) {
-		return redirect('/customer/marketplace');
+		return redirect('/marketplace');
 	}
 
 	return (

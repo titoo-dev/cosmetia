@@ -11,7 +11,7 @@ export default function MarketplaceLayout({
 }) {
   const pathname = usePathname();
   
-  const isProductsActive = pathname === "/customer/marketplace" || pathname === "/customer/marketplace/products";
+  const isProductsActive = pathname === "/marketplace" || pathname === "/marketplace/products";
 
   // display none if url contain id
   const isIdActive = /\/customer\/marketplace\/products\/[^\/]+/.test(pathname);
@@ -23,12 +23,12 @@ export default function MarketplaceLayout({
           <Tabs value={isProductsActive ? "products" : "documents"} className="w-full">
             <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
               <TabsTrigger value="products" asChild>
-                <Link href="/customer/marketplace/products" className="text-sm font-semibold">
+                <Link href="/marketplace/products" className="text-sm font-semibold">
                   Produits
                 </Link>
               </TabsTrigger>
               <TabsTrigger value="documents" asChild>
-                <Link href="/customer/marketplace/documents" className="text-sm font-semibold">
+                <Link href="/marketplace/documents" className="text-sm font-semibold">
                   Documents
                 </Link>
               </TabsTrigger>
