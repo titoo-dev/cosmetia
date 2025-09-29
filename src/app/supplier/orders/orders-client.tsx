@@ -19,7 +19,6 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | "ALL">("ALL");
   const [showFilters, setShowFilters] = useState(false);
-  const [ordersList, setOrdersList] = useState(orders);
 
   console.log('orders', JSON.stringify(orders, null, 2));
 
@@ -64,7 +63,7 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
   };
 
 
-  const filteredOrders = ordersList.filter(order => {
+  const filteredOrders = orders.filter(order => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = (
       order.product.name.toLowerCase().includes(searchLower) ||
