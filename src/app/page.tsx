@@ -13,8 +13,12 @@ export default async function Home() {
 
 	console.log('currentUser', currentUser);
 
-	if (currentUser) {
+	if (currentUser && currentUser.role === 'CUSTOMER') {
 		return redirect('/marketplace');
+	}
+
+	if (currentUser && currentUser.role === 'SUPPLIER') {
+		return redirect('/supplier/dashboard');
 	}
 
 	return (
