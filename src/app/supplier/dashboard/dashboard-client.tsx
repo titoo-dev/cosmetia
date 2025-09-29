@@ -21,7 +21,10 @@ import {
   FileText,
   ShoppingBag,
   User,
+  X,
 } from "lucide-react";
+import { toast } from "sonner";
+import * as XLSX from 'xlsx';
 import { DashboardStats } from "@/actions/supplier/dashboard/get-dashboard-stats-action";
 import { LeadWithDetails } from "@/actions/supplier/dashboard/get-supplier-leads-action";
 
@@ -45,6 +48,88 @@ const formatDate = (date: Date) => {
   }).format(new Date(date));
 };
 
+const exportToExcel = (leads: LeadWithDetails[]) => {
+  // Prepare data for export
+  const exportData = leads.map((lead, index) => ({
+    '#': index + 1,
+    'Acheteur': lead.customerCompanyName,
+    'Email': lead.customerEmail,
+    'Date': formatDate(lead.date),
+    'Adresse IP': lead.ipAddress,
+    'Contexte': lead.contextLabel,
+    'Produit': lead.productName,
+  }));
+
+  // Create workbook and worksheet
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(exportData);
+
+  // Set column widths
+  const colWidths = [
+    { wch: 5 },   // #
+    { wch: 25 },  // Acheteur
+    { wch: 30 },  // Email
+    { wch: 20 },  // Date
+    { wch: 15 },  // Adresse IP
+    { wch: 20 },  // Contexte
+    { wch: 30 },  // Produit
+  ];
+  ws['!cols'] = colWidths;
+
+  // Add header styling
+  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const headerCell = XLSX.utils.encode_cell({ r: 0, c: col });
+    if (!ws[headerCell]) continue;
+    
+    ws[headerCell].s = {
+      font: { bold: true, color: { rgb: "FFFFFF" } },
+      fill: { fgColor: { rgb: "166970" } }, // Primary color background
+      alignment: { horizontal: "center", vertical: "center" },
+      border: {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } }
+      }
+    };
+  }
+
+  // Add data row styling
+  for (let row = 1; row <= range.e.r; row++) {
+    for (let col = range.s.c; col <= range.e.c; col++) {
+      const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+      if (!ws[cellRef]) continue;
+      
+      ws[cellRef].s = {
+        alignment: { horizontal: "left", vertical: "center" },
+        border: {
+          top: { style: "thin", color: { rgb: "E5E7EB" } },
+          bottom: { style: "thin", color: { rgb: "E5E7EB" } },
+          left: { style: "thin", color: { rgb: "E5E7EB" } },
+          right: { style: "thin", color: { rgb: "E5E7EB" } }
+        }
+      };
+
+      // Alternate row background
+      if (row % 2 === 0) {
+        ws[cellRef].s.fill = { fgColor: { rgb: "F9FAFB" } };
+      }
+    }
+  }
+
+  // Add worksheet to workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Leads");
+
+  // Generate filename with current date
+  const now = new Date();
+  const dateStr = now.toISOString().split('T')[0];
+  const filename = `leads-${dateStr}.xlsx`;
+
+  // Save file
+  XLSX.writeFile(wb, filename);
+};
+
 interface DashboardClientProps {
   initialStats: DashboardStats;
   initialLeads: LeadWithDetails[];
@@ -61,26 +146,38 @@ export function DashboardClient({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [leadsList, setLeadsList] = useState(initialLeads);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    
-    // Update URL with search params
-    const params = new URLSearchParams(searchParams.toString());
-    if (query) {
-      params.set("search", query);
-    } else {
-      params.delete("search");
-    }
-    params.delete("page"); // Reset to first page on new search
-    
-    router.push(`?${params.toString()}`);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
   };
 
   const handleExport = () => {
-    // TODO: Implement CSV/Excel export functionality
-    console.log("Export des leads");
+    try {
+      exportToExcel(filteredLeads);
+      toast.success("Export des leads réussi");
+    } catch (error) {
+      toast.error("Erreur lors de l'export des leads");
+      console.error("Error exporting leads:", error);
+    }
   };
+
+  const filteredLeads = leadsList.filter(lead => {
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = (
+      lead.customerCompanyName.toLowerCase().includes(searchLower) ||
+      lead.customerEmail.toLowerCase().includes(searchLower) ||
+      (lead.productName && lead.productName.toLowerCase().includes(searchLower)) ||
+      lead.contextLabel.toLowerCase().includes(searchLower) ||
+      lead.ipAddress.toLowerCase().includes(searchLower)
+    );
+    
+    return matchesSearch;
+  });
 
   return (
     <div className="min-h-screen">
@@ -153,7 +250,7 @@ export function DashboardClient({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             {/* Title */}
             <h1 className="text-2xl font-bold text-gray-900">
-              Liste des leads <span className="text-gray-500 font-normal">(Total {initialTotal})</span>
+              Liste des leads <span className="text-gray-500 font-normal">(Total {filteredLeads.length})</span>
             </h1>
             
             {/* Search and Actions */}
@@ -166,8 +263,16 @@ export function DashboardClient({
                   placeholder="Recherche"
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full sm:w-64 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#166970] focus:border-[#166970]"
+                  className="pl-10 pr-10 py-2 w-full sm:w-64 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#166970] focus:border-[#166970]"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
               
               {/* Filter Button */}
@@ -178,6 +283,18 @@ export function DashboardClient({
                 <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filtrer</span>
               </Button>
+              
+              {/* Clear Search Button */}
+              {searchQuery && (
+                <Button 
+                  variant="ghost" 
+                  onClick={clearSearch}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+                >
+                  <X className="w-4 h-4" />
+                  <span className="hidden sm:inline">Effacer</span>
+                </Button>
+              )}
               
               {/* Export Button */}
               <Button 
@@ -205,14 +322,14 @@ export function DashboardClient({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {initialLeads.length === 0 ? (
+              {filteredLeads.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="py-8 px-6 text-center text-gray-500">
                     {searchQuery ? "Aucun lead trouvé pour cette recherche" : "Aucun lead disponible"}
                   </TableCell>
                 </TableRow>
               ) : (
-                initialLeads.map((lead) => (
+                filteredLeads.map((lead) => (
                   <TableRow key={lead.id} className="border-b border-gray-100 hover:bg-gray-50">
                     <TableCell className="py-4 px-6">
                       <div className="flex items-center space-x-3">
