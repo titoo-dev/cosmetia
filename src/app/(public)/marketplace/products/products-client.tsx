@@ -42,7 +42,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
         } else {
             params.delete('query');
         }
-        router.push(`/customer/marketplace/products?${params.toString()}`);
+        router.push(`/marketplace/products?${params.toString()}`);
     };
 
     const renderStars = (rating: number) => {
@@ -62,7 +62,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
         } else {
             params.delete(key);
         }
-        router.push(`/customer/marketplace/products?${params.toString()}`);
+        router.push(`/marketplace/products?${params.toString()}`);
     };
 
     return (
@@ -136,7 +136,7 @@ export default function ProductsClient({ products, searchParams, categories, fun
             {/* Product Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {products.map((product) => (
-                    <Link href={`/customer/marketplace/products/${product.id}`} key={product.id}>
+                    <Link href={`/marketplace/products/${product.id}`} key={product.id}>
                         <Card className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0 cursor-pointer">
                             <CardContent className="p-0">
                                 {/* Product Image Placeholder */}

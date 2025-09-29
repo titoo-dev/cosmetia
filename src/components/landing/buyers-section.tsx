@@ -25,7 +25,7 @@ export function BuyersSection() {
 					"Assistant IA pour la formulation"
 				]}
 			/>
-			<Link href="/customer/marketplace/products" className="bg-[#166970] text-white px-6 py-3 rounded-lg hover:bg-[#145a61] transition-colors inline-block">
+			<Link href="/marketplace/products" className="bg-[#166970] text-white px-6 py-3 rounded-lg hover:bg-[#145a61] transition-colors inline-block">
 				Explorer le marketplace
 			</Link>
 		</div>

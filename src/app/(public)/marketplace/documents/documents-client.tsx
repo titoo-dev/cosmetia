@@ -55,7 +55,7 @@ export default function DocumentsClient({
         } else {
             params.delete('query');
         }
-        router.push(`/customer/marketplace/documents?${params.toString()}`);
+        router.push(`/marketplace/documents?${params.toString()}`);
     };
 
     const handleFilterChange = (key: string, value: string) => {
@@ -65,7 +65,7 @@ export default function DocumentsClient({
         } else {
             params.delete(key);
         }
-        router.push(`/customer/marketplace/documents?${params.toString()}`);
+        router.push(`/marketplace/documents?${params.toString()}`);
     };
 
     return (

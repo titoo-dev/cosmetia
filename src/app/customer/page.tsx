@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
 
 export default function CustomerPage() {
-    return redirect('/customer/marketplace')
+    return redirect('/marketplace')
 }

@@ -36,7 +36,7 @@ export default function NotFound() {
           </Button>
           
           <Button variant="outline" asChild className="border-[#166970] text-[#166970] hover:bg-[#166970] hover:text-white">
-            <Link href="/customer/marketplace" className="flex items-center space-x-2">
+            <Link href="/marketplace" className="flex items-center space-x-2">
               <ArrowLeft className="w-4 h-4" />
               <span>Marketplace</span>
             </Link>
