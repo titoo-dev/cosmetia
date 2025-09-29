@@ -57,7 +57,7 @@ export default function SupplierProductsClient({
                   src={product.pictureUrl}
                   alt={product.name || "Product Image"}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
