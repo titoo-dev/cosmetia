@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Download, X, MessageCircle } from "lucide-react";
 import * as XLSX from 'xlsx';
-import { OrderStatus } from "@/lib/types/types";
 import { SupplierOrderItem } from "@/actions/supplier/orders/get-supplier-orders-action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
