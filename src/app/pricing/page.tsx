@@ -5,9 +5,6 @@ export const dynamic = 'force-dynamic'
 export default function PricingPage() {
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header />
-
-            {/* Header */}
             <div className="bg-white border-b border-gray-200">
                 <div className="container mx-auto px-6 py-12">
                     <div className="text-center">
