@@ -48,7 +48,7 @@ export default function SupplierProductsClient({
   const renderGridView = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {products.map((product) => (
-        <Card key={product.id} className="group bg-white border border-gray-200 hover:border-[#166970] hover:shadow-lg transition-all duration-300 overflow-hidden pt-0">
+        <Card key={product.id} className="group bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden pt-0">
           <CardContent className="p-0">
             {/* Product Image */}
             <div className="w-full h-48 bg-[#F7F4EF] relative overflow-hidden">
