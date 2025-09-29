@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Download, X, MessageCircle } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Search, Filter, Download, X, MessageCircle, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import * as XLSX from 'xlsx';
 import { SupplierOrderItem } from "@/actions/supplier/orders/get-supplier-orders-action";
+import { deleteSupplierOrderAction } from "@/actions/supplier/orders/[id]/delete-supplier-order-action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface SupplierOrdersClientProps {
@@ -19,6 +22,8 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | "ALL">("ALL");
   const [showFilters, setShowFilters] = useState(false);
+  const [ordersList, setOrdersList] = useState(orders);
+  const [isPending, startTransition] = useTransition();
 
   console.log('orders', JSON.stringify(orders, null, 2));
 
@@ -62,8 +67,25 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
     });
   };
 
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      // Optimistic update - remove from UI immediately
+      setOrdersList(prev => prev.filter(order => order.id !== orderId));
+      
+      startTransition(async () => {
+        await deleteSupplierOrderAction(orderId);
+        toast.success("Devis supprimé avec succès");
+      });
+    } catch (error) {
+      // Revert optimistic update on error
+      setOrdersList(orders);
+      toast.error("Erreur lors de la suppression du devis");
+      console.error("Error deleting order:", error);
+    }
+  };
 
-  const filteredOrders = orders.filter(order => {
+
+  const filteredOrders = ordersList.filter(order => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = (
       order.product.name.toLowerCase().includes(searchLower) ||
@@ -248,20 +270,21 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
         {/* Table Section */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <Table>
-            <TableHeader>
-              <TableRow className="border-b border-gray-200">
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Acheteur</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Email</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Date</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Nom du produit</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Quantité</TableHead>
-                <TableHead className="font-semibold text-gray-900 py-4 px-6">Status</TableHead>
-              </TableRow>
-            </TableHeader>
+             <TableHeader>
+               <TableRow className="border-b border-gray-200">
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Acheteur</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Email</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Date</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Nom du produit</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Quantité</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Status</TableHead>
+                 <TableHead className="font-semibold text-gray-900 py-4 px-6">Actions</TableHead>
+               </TableRow>
+             </TableHeader>
             <TableBody>
               {filteredOrders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-8 px-6 text-center text-gray-500">
+                  <TableCell colSpan={7} className="py-8 px-6 text-center text-gray-500">
                     Aucun devis trouvé
                   </TableCell>
                 </TableRow>
@@ -291,14 +314,50 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
                     <TableCell className="py-4 px-6 text-gray-700">
                       {order.quantity} Kg
                     </TableCell>
-                    <TableCell className="py-4 px-6">
-                      <Badge
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeStyle(order.status)}`}
-                      >
-                        {getStatusLabel(order.status)}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
+                     <TableCell className="py-4 px-6">
+                       <Badge
+                         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeStyle(order.status)}`}
+                       >
+                         {getStatusLabel(order.status)}
+                       </Badge>
+                     </TableCell>
+                     <TableCell className="py-4 px-6">
+                       <AlertDialog>
+                         <AlertDialogTrigger asChild>
+                           <Button
+                             variant="ghost"
+                             size="sm"
+                             className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                             disabled={isPending}
+                           >
+                             <Trash2 className="w-4 h-4" />
+                           </Button>
+                         </AlertDialogTrigger>
+                         <AlertDialogContent>
+                           <AlertDialogHeader>
+                             <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                             <AlertDialogDescription>
+                               Êtes-vous sûr de vouloir supprimer ce devis ? Cette action ne peut pas être annulée.
+                               <br />
+                               <br />
+                               <strong>Produit:</strong> {order.product.name}
+                               <br />
+                               <strong>Acheteur:</strong> {order.customer.companyName}
+                             </AlertDialogDescription>
+                           </AlertDialogHeader>
+                           <AlertDialogFooter>
+                             <AlertDialogCancel>Annuler</AlertDialogCancel>
+                             <AlertDialogAction
+                               onClick={() => handleDeleteOrder(order.id)}
+                               className="bg-red-600 hover:bg-red-700"
+                             >
+                               Supprimer
+                             </AlertDialogAction>
+                           </AlertDialogFooter>
+                         </AlertDialogContent>
+                       </AlertDialog>
+                     </TableCell>
+                   </TableRow>
                 ))
               )}
             </TableBody>
