@@ -68,32 +68,6 @@ export default function DocumentsClient({
         router.push(`/customer/marketplace/documents?${params.toString()}`);
     };
 
-    const getCompanyLogo = (companyName: string) => {
-        const logos: { [key: string]: string } = {
-            "Lancôme": "A+",
-            "Nuxe": "TCL",
-            "Biotherm": "B",
-            "Givaudan": "G",
-            "Estée Lauder": "E",
-            "Vichy": "V",
-            "Clinique": "C"
-        };
-        return logos[companyName] || companyName.charAt(0);
-    };
-
-    const getCompanyLogoColor = (companyName: string) => {
-        const colors: { [key: string]: string } = {
-            "Lancôme": "bg-red-500",
-            "Nuxe": "bg-red-500",
-            "Biotherm": "bg-blue-500",
-            "Givaudan": "bg-red-500",
-            "Estée Lauder": "bg-green-500",
-            "Vichy": "bg-green-500",
-            "Clinique": "bg-red-500"
-        };
-        return colors[companyName] || "bg-gray-500";
-    };
-
     return (
         <div className="space-y-6">
             {/* Documents Search Bar */}
