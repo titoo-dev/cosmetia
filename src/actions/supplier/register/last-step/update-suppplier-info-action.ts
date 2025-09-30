@@ -10,7 +10,6 @@ const updateSupplierInfoSchema = z.object({
     phoneNumber: z.string().min(1, "Le numéro de téléphone est requis"),
     website: z.string().optional(),
     activityDescription: z.string().min(1, "La description de l'activité est requise"),
-    picture: z.string().optional(),
 });
 
 export async function updateSupplierInfoAction(prevState: unknown, formData: FormData) {
@@ -20,7 +19,7 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
     const phoneNumber = formData.get("phoneNumber") as string;
     const website = formData.get("website") as string;
     const activityDescription = formData.get("activityDescription") as string;
-    const picture = formData.get("picture") as string;
+    const picture = formData.get("picture") as File | null;
 
     const validatedFields = updateSupplierInfoSchema.safeParse({
         companyName,
@@ -29,7 +28,6 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
         phoneNumber,
         website,
         activityDescription,
-        picture,
     });
 
     if (!validatedFields.success) {
@@ -59,8 +57,8 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
             formDataToSend.append("website", validatedFields.data.website);
         }
         formDataToSend.append("activityDescription", validatedFields.data.activityDescription);
-        if (validatedFields.data.picture) {
-            formDataToSend.append("picture", validatedFields.data.picture);
+        if (picture && picture.size > 0) {
+            formDataToSend.append("picture", picture);
         }
 
         const response = await fetch(`${process.env.API_BASE_URL}/supplier/supplier`, {

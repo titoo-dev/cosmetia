@@ -19,7 +19,7 @@ interface SupplierProfileClientProps {
 
 export default function SupplierProfileClient({ supplierData }: SupplierProfileClientProps) {
     const router = useRouter();
-    const [profileImage, setProfileImage] = useState<string | null>(supplierData?.pictureUrl || null);
+    const [profileImage, setProfileImage] = useState<string>(supplierData?.pictureUrl || "");
     const [state, formAction, isPending] = useActionState(updateSupplierInfoAction, {
         errors: {} as Record<string, string[]>,
         message: "",
@@ -44,16 +44,8 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target?.result as string;
-                setProfileImage(result);
-                const pictureInput = document.getElementById('picture') as HTMLInputElement;
-                if (pictureInput) {
-                    pictureInput.value = result;
-                }
-            };
-            reader.readAsDataURL(file);
+            const url = URL.createObjectURL(file);
+            setProfileImage(url);
         }
     };
 
@@ -81,7 +73,7 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
                                     </AvatarFallback>
                                 </Avatar>
                                 <label
-                                    htmlFor="profile-image"
+                                    htmlFor="picture"
                                     className="absolute -bottom-2 -right-2 bg-[#166970] text-white rounded-full p-2 cursor-pointer hover:bg-[#145a61] transition-colors"
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,17 +81,16 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
                                     </svg>
                                 </label>
                                 <input
-                                    id="profile-image"
+                                    id="picture"
+                                    name="picture"
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     className="hidden"
+                                    disabled={isPending}
                                 />
                             </div>
                         </div>
-
-                        {/* Hidden input for picture */}
-                        <input type="hidden" id="picture" name="picture" defaultValue={supplierData?.pictureUrl || ""} />
 
                         {/* Email (read-only) */}
                         <div className="space-y-2">

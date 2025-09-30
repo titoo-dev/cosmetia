@@ -8,7 +8,6 @@ const updateCustomerInfoSchema = z.object({
     nameOfContact: z.string().min(1, "Le nom de contact est requis"),
     phoneNumber: z.string().min(1, "Le numéro de téléphone est requis"),
     purchaseObjective: z.string().min(1, "L'objectif d'achat est requis"),
-    picture: z.string().optional(),
 });
 
 export async function updateCustomerInfoAction(prevState: unknown, formData: FormData) {
@@ -16,14 +15,13 @@ export async function updateCustomerInfoAction(prevState: unknown, formData: For
     const nameOfContact = formData.get("nameOfContact") as string;
     const phoneNumber = formData.get("phoneNumber") as string;
     const purchaseObjective = formData.get("purchaseObjective") as string;
-    const picture = formData.get("picture") as string;
+    const picture = formData.get("picture") as File | null;
 
     const validatedFields = updateCustomerInfoSchema.safeParse({
         companyName,
         nameOfContact,
         phoneNumber,
         purchaseObjective,
-        picture,
     });
 
     if (!validatedFields.success) {
@@ -49,8 +47,8 @@ export async function updateCustomerInfoAction(prevState: unknown, formData: For
         formDataToSend.append("nameOfContact", validatedFields.data.nameOfContact);
         formDataToSend.append("phoneNumber", validatedFields.data.phoneNumber);
         formDataToSend.append("purchaseObjective", validatedFields.data.purchaseObjective);
-        if (validatedFields.data.picture && validatedFields.data.picture.trim() !== "") {
-            formDataToSend.append("picture", validatedFields.data.picture);
+        if (picture && picture.size > 0) {
+            formDataToSend.append("picture", picture);
         }
 
         const response = await fetch(`${process.env.API_BASE_URL}/customer/customer`, {
@@ -63,11 +61,8 @@ export async function updateCustomerInfoAction(prevState: unknown, formData: For
 
         const data = await response.json();
 
-        if (!response.ok) {
-            console.error('API Error:', data);
-            return {
-                error: data.message || `Erreur ${response.status}: ${response.statusText}`,
-            };
+        if (response.status !== 200) {
+            throw new Error(data.message);
         }
 
         console.log('USER INFO UPDATED', data);

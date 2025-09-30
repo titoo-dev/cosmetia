@@ -19,8 +19,7 @@ interface CustomerProfileClientProps {
 
 export default function CustomerProfileClient({ customerData, currentUser }: CustomerProfileClientProps) {
     const router = useRouter();
-    const [profileImage, setProfileImage] = useState<string | null>(customerData?.pictureUrl || null);
-    const [pictureValue, setPictureValue] = useState<string>(customerData?.pictureUrl || "");
+    const [profileImage, setProfileImage] = useState<string>(customerData?.pictureUrl || "");
     const [isPending, startTransition] = useTransition();
     const [errors, setErrors] = useState<Record<string, string[]>>({});
     const formRef = useRef<HTMLFormElement>(null);
@@ -51,13 +50,8 @@ export default function CustomerProfileClient({ customerData, currentUser }: Cus
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target?.result as string;
-                setProfileImage(result);
-                setPictureValue(result);
-            };
-            reader.readAsDataURL(file);
+            const url = URL.createObjectURL(file);
+            setProfileImage(url);
         }
     };
 
@@ -85,7 +79,7 @@ export default function CustomerProfileClient({ customerData, currentUser }: Cus
                                     </AvatarFallback>
                                 </Avatar>
                                 <label
-                                    htmlFor="profile-image"
+                                    htmlFor="picture"
                                     className="absolute -bottom-2 -right-2 bg-[#166970] text-white rounded-full p-2 cursor-pointer hover:bg-[#145a61] transition-colors"
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,17 +87,16 @@ export default function CustomerProfileClient({ customerData, currentUser }: Cus
                                     </svg>
                                 </label>
                                 <input
-                                    id="profile-image"
+                                    id="picture"
+                                    name="picture"
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     className="hidden"
+                                    disabled={isPending}
                                 />
                             </div>
                         </div>
-
-                        {/* Hidden input for picture */}
-                        <input type="hidden" id="picture" name="picture" value={pictureValue} onChange={() => {}} />
 
                         {/* Email (read-only) */}
                         <div className="space-y-2">
