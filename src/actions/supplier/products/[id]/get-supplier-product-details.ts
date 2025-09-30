@@ -3,16 +3,15 @@
 import { getTokens } from "@/lib/cookies-storage";
 import { ProductEntity } from "@/lib/types/types";
 
-
-export async function getSupplierProducts(): Promise<ProductEntity[]> {
+export async function getSupplierProductDetails(id: string): Promise<ProductEntity | null> {
   try {
     const tokens = await getTokens();
 
     if (!tokens?.accessToken) {
-      return [];
+      return null;
     }
 
-    const url = `${process.env.API_BASE_URL}/product/supplier/my-products`;
+    const url = `${process.env.API_BASE_URL}/product/supplier/${id}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -24,16 +23,13 @@ export async function getSupplierProducts(): Promise<ProductEntity[]> {
     });
 
     if (response.status !== 200) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      return null;
     }
 
-    const products = await response.json();
+    const product = await response.json();
 
-    console.log('SUPPLIER PRODUCTS', products);
-
-    return products;
+    return product;
   } catch (error) {
-    console.error("Error fetching supplier products:", error);
-    throw new Error("Failed to fetch supplier products");
+    return null;
   }
 }

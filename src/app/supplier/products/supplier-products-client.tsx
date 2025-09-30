@@ -159,6 +159,7 @@ export default function SupplierProductsClient({
                 <Button 
                   className="w-full bg-[#166970] hover:bg-[#145a61] text-white font-medium"
                   size="sm"
+                  onClick={() => router.push(`/supplier/products/${product.id}/details`)}
                 >
                   Voir les détails
                 </Button>
