@@ -164,7 +164,7 @@ export default function SuppliersClient({ suppliers, searchParams, categories, c
                                 {/* Supplier Image Placeholder */}
                                 <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 flex items-center justify-center relative overflow-hidden">
                                     <Image
-                                        src={supplier.pictureUrl || '/placeholder-supplier.jpg'}
+                                        src={supplier.coverPhotoUrl || '/placeholder-supplier.jpg'}
                                         alt={`${supplier.companyName} supplier image`}
                                         fill
                                         className="object-cover"
@@ -173,10 +173,20 @@ export default function SuppliersClient({ suppliers, searchParams, categories, c
 
                                 {/* Company Logo */}
                                 <div className="relative -mt-8 ml-4 mb-4">
-                                    <div className={`w-12 h-12 ${getLogoColor(supplier.companyName)} rounded-full flex items-center justify-center shadow-lg`}>
-                                        <span className="text-white text-xs font-bold text-center">
-                                            {getLogoText(supplier.companyName)}
-                                        </span>
+                                    <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-white overflow-hidden">
+                                        {supplier.pictureUrl ? (
+                                            <Image
+                                                src={supplier.pictureUrl}
+                                                alt={supplier.companyName}
+                                                width={48}
+                                                height={48}
+                                                className="object-cover w-12 h-12 rounded-full"
+                                            />
+                                        ) : (
+                                            <span className="text-gray-400 text-xs font-bold text-center">
+                                                {getLogoText(supplier.companyName)}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
 

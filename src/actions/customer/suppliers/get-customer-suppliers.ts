@@ -33,6 +33,8 @@ export async function getCustomerSuppliers(params?: {
 
         const suppliers = await response.json();
 
+        console.log('CUSTOMER SUPPLIERS', suppliers);
+
         return suppliers;
     } catch (error) {
         console.error("Error fetching customer suppliers:", error);

@@ -137,6 +137,7 @@ export interface SupplierUserEntity {
   picture?: string;
   siretNumber: string;
   nameOfContact: string;
+  coverPhotoUrl?: string;
   phoneNumber: string;
   website: string;
   activityDescription: string;
