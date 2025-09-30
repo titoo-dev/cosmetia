@@ -20,6 +20,7 @@ interface CustomerProfileClientProps {
 export default function CustomerProfileClient({ customerData, currentUser }: CustomerProfileClientProps) {
     const router = useRouter();
     const [profileImage, setProfileImage] = useState<string | null>(customerData?.pictureUrl || null);
+    const [pictureValue, setPictureValue] = useState<string>(customerData?.pictureUrl || "");
     const [isPending, startTransition] = useTransition();
     const [errors, setErrors] = useState<Record<string, string[]>>({});
     const formRef = useRef<HTMLFormElement>(null);
@@ -54,10 +55,7 @@ export default function CustomerProfileClient({ customerData, currentUser }: Cus
             reader.onload = (e) => {
                 const result = e.target?.result as string;
                 setProfileImage(result);
-                const pictureInput = document.getElementById('picture') as HTMLInputElement;
-                if (pictureInput) {
-                    pictureInput.value = result;
-                }
+                setPictureValue(result);
             };
             reader.readAsDataURL(file);
         }
@@ -105,7 +103,7 @@ export default function CustomerProfileClient({ customerData, currentUser }: Cus
                         </div>
 
                         {/* Hidden input for picture */}
-                        <input type="hidden" id="picture" name="picture" defaultValue={customerData?.pictureUrl || ""} />
+                        <input type="hidden" id="picture" name="picture" value={pictureValue} onChange={() => {}} />
 
                         {/* Email (read-only) */}
                         <div className="space-y-2">

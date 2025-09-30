@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
 			new URL('https://cosmetia.s3.us-east-1.amazonaws.com/**'),
 		],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
+  }
 };
 
 export default nextConfig;
