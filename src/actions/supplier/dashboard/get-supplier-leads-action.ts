@@ -76,7 +76,6 @@ export async function getSupplierLeadsAction(
     }
 
     const data = await response.json();
-    console.log('Leads data:', JSON.stringify(data, null, 2));
 
     // Transform the API response to match our interface
     const leads: LeadWithDetails[] = (data.leads || data || []).map((lead: LeadEntity) => ({

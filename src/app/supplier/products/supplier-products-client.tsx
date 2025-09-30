@@ -5,11 +5,23 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CheckCircle, MessageCircle, Search, Star, Grid3X3, List, Plus, Edit, Trash2, Filter } from "lucide-react";
 import { ProductEntity } from "@/lib/types/types";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { deleteSupplierProductAction } from "@/actions/supplier/products/[id]/delete-supplier-product-action";
+import { toast } from "sonner";
 
 interface SupplierProductsClientProps {
   products: ProductEntity[];
@@ -23,6 +35,8 @@ export default function SupplierProductsClient({
 
   const [searchTerm, setSearchTerm] = useState(urlSearchParams.get('query') || "");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [productToDelete, setProductToDelete] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
@@ -33,6 +47,21 @@ export default function SupplierProductsClient({
       params.delete('query');
     }
     router.push(`/supplier/products?${params.toString()}`);
+  };
+
+  const handleDeleteProduct = async () => {
+    if (!productToDelete) return;
+
+    startTransition(async () => {
+      try {
+        await deleteSupplierProductAction(productToDelete);
+        toast.success("Produit supprimé avec succès");
+      } catch (error) {
+        toast.error("Erreur lors de la suppression du produit");
+      } finally {
+        setProductToDelete(null);
+      }
+    });
   };
 
   const renderStars = (rating: number) => {
@@ -138,7 +167,13 @@ export default function SupplierProductsClient({
                     <Edit className="w-3 h-3 mr-1" />
                     Modifier
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                    onClick={() => setProductToDelete(product.id)}
+                    disabled={isPending}
+                  >
                     <Trash2 className="w-3 h-3" />
                   </Button>
                 </div>
@@ -258,7 +293,13 @@ export default function SupplierProductsClient({
                     <Edit className="w-3 h-3 sm:mr-1" />
                     <span className="hidden sm:inline">Modifier</span>
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                    onClick={() => setProductToDelete(product.id)}
+                    disabled={isPending}
+                  >
                     <Trash2 className="w-3 h-3" />
                   </Button>
                 </div>
@@ -373,6 +414,27 @@ export default function SupplierProductsClient({
           </div>
         </div>
       </div>
+
+      <AlertDialog open={!!productToDelete} onOpenChange={() => setProductToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Le produit sera définitivement supprimé de votre catalogue.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteProduct}
+              disabled={isPending}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {isPending ? "Suppression..." : "Supprimer"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

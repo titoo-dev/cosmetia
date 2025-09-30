@@ -7,8 +7,6 @@ export default async function SupplierProductsPage() {
     getSupplierProducts(),
   ]);
 
-  console.log('supplier products', products);
-
   return (
     <SupplierProductsClient 
       products={products}
