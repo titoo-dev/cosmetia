@@ -39,6 +39,12 @@ export function UserMenu({ user }: UserMenuProps) {
 	const userEmail = user?.email || 'Guest';
 	const userPicture = user?.customer?.pictureUrl || user?.supplier?.pictureUrl || 'Guest';
 
+	const profileUrl = {
+		'CUSTOMER': '/customer/profile',
+		'SUPPLIER': '/supplier/profile',
+		'PROVIDER': '/provider/profile',
+	}
+	
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -79,7 +85,7 @@ export function UserMenu({ user }: UserMenuProps) {
 				<div className="bg-white rounded-b-lg">
 					<DropdownMenuItem asChild>
 						<Link
-							href="/customer/profile"
+							href={profileUrl[user?.role as keyof typeof profileUrl]}
 							className="cursor-pointer flex items-center w-full px-6 py-4 hover:bg-gray-50"
 						>
 							<div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">

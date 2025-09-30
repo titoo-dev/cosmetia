@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Building, Phone, User, Globe, Mail } from "lucide-react";
+import { Building, Phone, User, Globe, Mail, Camera } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useActionState } from "react";
 import { updateSupplierInfoAction } from "@/actions/supplier/register/last-step/update-suppplier-info-action";
@@ -20,6 +20,7 @@ interface SupplierProfileClientProps {
 export default function SupplierProfileClient({ supplierData }: SupplierProfileClientProps) {
     const router = useRouter();
     const [profileImage, setProfileImage] = useState<string>(supplierData?.pictureUrl || "");
+    const [coverPhoto, setCoverPhoto] = useState<string>(supplierData?.coverPhotoUrl || "");
     const [state, formAction, isPending] = useActionState(updateSupplierInfoAction, {
         errors: {} as Record<string, string[]>,
         message: "",
@@ -49,48 +50,85 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
         }
     };
 
+    const handleCoverPhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setCoverPhoto(url);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-2xl mx-auto px-4 py-8">
-                <div className="bg-white rounded-lg shadow-sm p-6">
-                    <div className="text-center mb-6">
-                        <h1 className="text-2xl font-bold text-black font-space-grotesk">
-                            Mon Profil Fournisseur
-                        </h1>
-                        <p className="text-gray-600 font-plus-jakarta">
-                            Gérez vos informations professionnelles
-                        </p>
-                    </div>
-
+            <div className="max-w-4xl mx-auto px-4 py-8">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                     <form ref={formRef} action={formAction} className="space-y-6">
-                        {/* Profile Image */}
-                        <div className="flex justify-center mb-6">
-                            <div className="relative">
-                                <Avatar className="w-24 h-24">
-                                    <AvatarImage className="object-cover" src={profileImage || undefined} />
-                                    <AvatarFallback className="bg-gray-200 text-gray-600">
-                                        <User className="w-10 h-10" />
-                                    </AvatarFallback>
-                                </Avatar>
-                                <label
-                                    htmlFor="picture"
-                                    className="absolute -bottom-2 -right-2 bg-[#166970] text-white rounded-full p-2 cursor-pointer hover:bg-[#145a61] transition-colors"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                </label>
-                                <input
-                                    id="picture"
-                                    name="picture"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                    className="hidden"
-                                    disabled={isPending}
+                        {/* Cover Photo */}
+                        <div className="relative h-48 bg-gradient-to-r from-[#166970] to-[#1a7a82] overflow-hidden">
+                            {coverPhoto && (
+                                <img 
+                                    src={coverPhoto} 
+                                    alt="Cover" 
+                                    className="w-full h-full object-cover"
                                 />
+                            )}
+                            <label
+                                htmlFor="coverPhoto"
+                                className="absolute top-4 right-4 bg-white text-gray-700 rounded-full p-2 cursor-pointer hover:bg-gray-100 transition-colors shadow-md"
+                            >
+                                <Camera className="w-5 h-5" />
+                            </label>
+                            <input
+                                id="coverPhoto"
+                                name="coverPhoto"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleCoverPhotoUpload}
+                                className="hidden"
+                                disabled={isPending}
+                            />
+                        </div>
+
+                        {/* Profile Section */}
+                        <div className="px-6 -mt-16 relative">
+                            <div className="flex flex-col items-center">
+                                {/* Profile Image */}
+                                <div className="relative mb-4">
+                                    <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
+                                        <AvatarImage className="object-cover" src={profileImage || undefined} />
+                                        <AvatarFallback className="bg-gray-200 text-gray-600">
+                                            <User className="w-14 h-14" />
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <label
+                                        htmlFor="picture"
+                                        className="absolute -bottom-2 -right-2 bg-[#166970] text-white rounded-full p-2 cursor-pointer hover:bg-[#145a61] transition-colors shadow-md"
+                                    >
+                                        <Camera className="w-4 h-4" />
+                                    </label>
+                                    <input
+                                        id="picture"
+                                        name="picture"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="hidden"
+                                        disabled={isPending}
+                                    />
+                                </div>
+
+                                <div className="text-center mb-6">
+                                    <h1 className="text-2xl font-bold text-black font-space-grotesk">
+                                        Mon Profil Fournisseur
+                                    </h1>
+                                    <p className="text-gray-600 font-plus-jakarta">
+                                        Gérez vos informations professionnelles
+                                    </p>
+                                </div>
                             </div>
                         </div>
+
+                        <div className="px-6 pb-6 space-y-6">
 
                         {/* Email (read-only) */}
                         <div className="space-y-2">
@@ -243,9 +281,9 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
                         </div>
 
                         {/* General Error Display */}
-                        {(state.errors as Record<string, string[]>)['general']?.[0] && (
+                        {state.error && (
                             <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                                <p className="text-sm text-red-600">{(state.errors as Record<string, string[]>)['general'][0]}</p>
+                                <p className="text-sm text-red-600">{state.error}</p>
                             </div>
                         )}
 
@@ -258,6 +296,7 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
                         >
                             {isPending ? "Mise à jour en cours..." : "Mettre à jour le profil"}
                         </Button>
+                        </div>
                     </form>
                 </div>
             </div>

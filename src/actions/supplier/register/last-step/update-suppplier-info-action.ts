@@ -20,6 +20,7 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
     const website = formData.get("website") as string;
     const activityDescription = formData.get("activityDescription") as string;
     const picture = formData.get("picture") as File | null;
+    const coverPhoto = formData.get("coverPhoto") as File | null;
 
     const validatedFields = updateSupplierInfoSchema.safeParse({
         companyName,
@@ -59,6 +60,9 @@ export async function updateSupplierInfoAction(prevState: unknown, formData: For
         formDataToSend.append("activityDescription", validatedFields.data.activityDescription);
         if (picture && picture.size > 0) {
             formDataToSend.append("picture", picture);
+        }
+        if (coverPhoto && coverPhoto.size > 0) {
+            formDataToSend.append("coverPhoto", coverPhoto);
         }
 
         const response = await fetch(`${process.env.API_BASE_URL}/supplier/supplier`, {
