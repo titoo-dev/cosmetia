@@ -64,20 +64,6 @@ export default function SupplierProductsClient({
                   <div className="text-gray-400 text-sm font-medium">Image produit</div>
                 </div>
               )}
-              
-              {/* Hover overlay with quick actions */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="secondary" className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Product Info */}
