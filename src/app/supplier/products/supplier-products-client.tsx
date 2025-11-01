@@ -325,7 +325,10 @@ export default function SupplierProductsClient({
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {/* Add Product Button */}
-              <Button className="bg-[#166970] hover:bg-[#145a61] text-white flex items-center gap-2 px-6 py-3 font-medium order-1 sm:order-2">
+              <Button
+                onClick={() => router.push('/supplier/products/new')}
+                className="bg-[#166970] hover:bg-[#145a61] text-white flex items-center gap-2 px-6 py-3 font-medium order-1 sm:order-2"
+              >
                 <Plus className="w-5 h-5" />
                 Ajouter un produit
               </Button>
@@ -395,7 +398,10 @@ export default function SupplierProductsClient({
                 </div>
                 <h3 className="text-lg font-semibold text-[#000000] mb-2">Aucun produit trouvé</h3>
                 <p className="text-gray-600 mb-6">Commencez par ajouter votre premier produit à votre catalogue.</p>
-                <Button className="bg-[#166970] hover:bg-[#145a61] text-white">
+                <Button
+                  onClick={() => router.push('/supplier/products/new')}
+                  className="bg-[#166970] hover:bg-[#145a61] text-white"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Ajouter un produit
                 </Button>
