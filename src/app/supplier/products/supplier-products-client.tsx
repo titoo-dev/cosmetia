@@ -208,7 +208,7 @@ export default function SupplierProductsClient({
                     {product.pictureUrl ? (
                       <Image
                         src={product.pictureUrl}
-                        alt={product.name}
+                        alt={product.name || "Product Image"}
                         width={56}
                         height={56}
                         className="rounded-xl object-cover w-full h-full"
