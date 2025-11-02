@@ -7,9 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Search, Filter, Download, X, Trash2 } from "lucide-react";
+import { Search, Filter, Download, X, Trash2, Eye } from "lucide-react";
 import { toast } from "sonner";
 import * as XLSX from 'xlsx';
+import Link from "next/link";
 import { OrderEntity, OrderStatus } from "@/lib/types/types";
 import { deleteCustomerOrderAction } from "@/actions/customer/orders/[id]/delete-customer-order-action";
 
@@ -319,40 +320,51 @@ export default function OrdersClient({ orders }: OrdersClientProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="py-4 px-6">
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
+                      <div className="flex items-center gap-2">
+                        <Link href={`/customer/order/${order.id}`}>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                            disabled={isPending}
+                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Eye className="w-4 h-4" />
                           </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Êtes-vous sûr de vouloir supprimer cette commande ? Cette action ne peut pas être annulée.
-                              <br />
-                              <br />
-                              <strong>Référence:</strong> {order.reference}
-                              <br />
-                              <strong>Produit(s):</strong> {order.orderItems.map((item) => item.product.name).join(', ')}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDeleteOrder(order.id)}
-                              className="bg-red-600 hover:bg-red-700"
+                        </Link>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                              disabled={isPending}
                             >
-                              Supprimer
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Êtes-vous sûr de vouloir supprimer cette commande ? Cette action ne peut pas être annulée.
+                                <br />
+                                <br />
+                                <strong>Référence:</strong> {order.reference}
+                                <br />
+                                <strong>Produit(s):</strong> {order.orderItems.map((item) => item.product.name).join(', ')}
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Annuler</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDeleteOrder(order.id)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Supprimer
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
