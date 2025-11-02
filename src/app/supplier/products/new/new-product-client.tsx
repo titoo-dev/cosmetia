@@ -28,13 +28,6 @@ import {
   ProductCountryEntity
 } from "@/lib/types/types";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 
 interface NewProductClientProps {
   categories: ProductCategoryEntity[];
@@ -174,9 +167,19 @@ export default function NewProductClient({
         formDataToSend.append("pricePerQuantity", formData.pricePerQuantity);
         formDataToSend.append("deliveryTime", formData.deliveryTime);
         formDataToSend.append("minimumOrderQuantity", formData.minimumOrderQuantity);
-        formDataToSend.append("categoriesToAdd", JSON.stringify(formData.categoriesToAdd));
-        formDataToSend.append("functionsToAdd", JSON.stringify(formData.functionsToAdd));
-        formDataToSend.append("countriesToAdd", JSON.stringify(formData.countriesToAdd));
+
+        // Append arrays - each item separately
+        formData.categoriesToAdd.forEach((id) => {
+          formDataToSend.append("categoriesToAdd", id);
+        });
+
+        formData.functionsToAdd.forEach((id) => {
+          formDataToSend.append("functionsToAdd", id);
+        });
+
+        formData.countriesToAdd.forEach((id) => {
+          formDataToSend.append("countriesToAdd", id);
+        });
 
         if (formData.picture) {
           formDataToSend.append("picture", formData.picture);
@@ -387,27 +390,6 @@ export default function NewProductClient({
                         className="mt-1.5"
                         required
                       />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="regulationScore" className="text-sm font-medium text-[#000000]">
-                        Score réglementaire
-                      </Label>
-                      <Select
-                        value={formData.regulationScore}
-                        onValueChange={(value) => handleInputChange("regulationScore", value)}
-                      >
-                        <SelectTrigger className="mt-1.5">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {[1, 2, 3, 4, 5].map((score) => (
-                            <SelectItem key={score} value={score.toString()}>
-                              {score} étoile{score > 1 ? "s" : ""}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                     </div>
 
                     <div>
