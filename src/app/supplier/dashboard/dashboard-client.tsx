@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table";
-import { 
-  Search, 
+import {
+  Search,
   Filter,
   Download,
   FileText,
@@ -139,11 +140,12 @@ interface DashboardClientProps {
   initialSearchQuery: string;
 }
 
-export function DashboardClient({ 
-  initialStats, 
-  initialLeads, 
-  initialSearchQuery 
+export function DashboardClient({
+  initialStats,
+  initialLeads,
+  initialSearchQuery
 }: DashboardClientProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [leadsList, setLeadsList] = useState(initialLeads);
   const [contextFilter, setContextFilter] = useState<LeadContext | "ALL">("ALL");
@@ -378,7 +380,11 @@ export function DashboardClient({
                 </TableRow>
               ) : (
                 filteredLeads.map((lead) => (
-                  <TableRow key={lead.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <TableRow
+                    key={lead.id}
+                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                    onClick={() => router.push(`/supplier/dashboard/${lead.id}`)}
+                  >
                     <TableCell className="py-4 px-6">
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-8 w-8">
@@ -401,7 +407,7 @@ export function DashboardClient({
                       {lead.ipAddress}
                     </TableCell>
                     <TableCell className="py-4 px-6">
-                      <Badge 
+                      <Badge
                         className="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100"
                       >
                         {lead.contextLabel}
