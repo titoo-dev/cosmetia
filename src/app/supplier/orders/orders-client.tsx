@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -19,6 +20,7 @@ interface SupplierOrdersClientProps {
 }
 
 export default function SupplierOrdersClient({ orders }: SupplierOrdersClientProps) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | "ALL">("ALL");
   const [showFilters, setShowFilters] = useState(false);
@@ -84,6 +86,9 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
     }
   };
 
+  const handleRowClick = (orderId: string) => {
+    router.push(`/supplier/order/${orderId}`);
+  };
 
   const filteredOrders = ordersList.filter(order => {
     const searchLower = searchTerm.toLowerCase();
@@ -290,7 +295,11 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
                 </TableRow>
               ) : (
                 filteredOrders.map((order) => (
-                  <TableRow key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <TableRow
+                    key={order.id}
+                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleRowClick(order.id)}
+                  >
                     <TableCell className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
@@ -329,6 +338,7 @@ export default function SupplierOrdersClient({ orders }: SupplierOrdersClientPro
                              size="sm"
                              className="text-red-600 hover:text-red-800 hover:bg-red-50"
                              disabled={isPending}
+                             onClick={(e) => e.stopPropagation()}
                            >
                              <Trash2 className="w-4 h-4" />
                            </Button>
