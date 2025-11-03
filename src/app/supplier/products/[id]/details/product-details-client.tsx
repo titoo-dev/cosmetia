@@ -80,7 +80,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   {product.pictureUrl ? (
                     <Image
                       src={product.pictureUrl}
-                      alt={product.name}
+                      alt={product.name || "Image produit"}
                       width={400}
                       height={400}
                       className="w-full h-full object-cover"
