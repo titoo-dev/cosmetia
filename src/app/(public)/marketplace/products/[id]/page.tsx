@@ -4,6 +4,7 @@ import { getCustomerProductById } from "@/actions/customer/marketplace/products/
 import { notFound } from "next/navigation";
 import ProductDetailClient from "./product-detail-client";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ProductDetailPageProps {
     params: Promise<{
@@ -59,7 +60,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                                 {product.pictureUrl ? (
                                     <Image
                                         src={product.pictureUrl}
-                                        alt={product.name}
+                                        alt={product.name || "Product Image"}
                                         width={400}
                                         height={256}
                                         className="w-full h-full object-cover rounded-lg"
@@ -81,13 +82,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
                             {/* Supplier Information */}
                             <div className="flex items-center space-x-3 mb-6">
-                                <div className={`w-10 h-10 ${getCompanyLogoColor(product.supplier?.companyName || '')} rounded-full flex items-center justify-center`}>
-                                    <span className="text-white font-bold text-lg">
-                                        {getCompanyLogo(product.supplier?.companyName || '')}
-                                    </span>
-                                </div>
+                                <Avatar className="w-10 h-10">
+                                    <AvatarImage 
+                                        src={product.owner?.picture} 
+                                        alt={product.owner?.companyName || 'Company'}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-blue-500 text-white text-lg font-bold uppercase">
+                                        {product.owner?.companyName?.charAt(0) || 'N/A'}
+                                    </AvatarFallback>
+                                </Avatar>
                                 <span className="text-lg font-semibold text-gray-800">
-                                    {product.supplier?.companyName || 'Unknown Supplier'}
+                                    {product.owner?.companyName || 'Unknown Supplier'}
                                 </span>
                             </div>
                         </div>
@@ -156,32 +162,40 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                         {/* Documents Section */}
                         <div className="bg-white rounded-lg shadow-sm p-6">
                             <h2 className="text-xl font-bold text-gray-900 mb-6">Documents</h2>
-                            <div className="space-y-4">
-                                {product.documents.map((document) => (
-                                    <div key={document.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                                        <div className="flex items-center space-x-3">
-                                            <FileText className="w-5 h-5 text-gray-500" />
-                                            <div>
-                                                <div className="text-sm font-medium text-gray-900">
-                                                    {document.technicalSheet}
-                                                </div>
-                                                <div className="text-sm text-gray-600">
-                                                    {document.name}
+                            {product.documents.length > 0 ? (
+                                <div className="space-y-4">
+                                    {product.documents.map((document) => (
+                                        <div key={document.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="flex items-center space-x-3">
+                                                <FileText className="w-5 h-5 text-gray-500" />
+                                                <div>
+                                                    <div className="text-sm font-medium text-gray-900">
+                                                        {document.technicalSheet}
+                                                    </div>
+                                                    <div className="text-sm text-gray-600">
+                                                        {document.name}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <a 
+                                                href={document.fileUrl} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                            >
+                                                <Download className="w-4 h-4 mr-2" />
+                                                Voir
+                                            </a>
                                         </div>
-                                        <a 
-                                            href={document.fileUrl} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                                        >
-                                            <Download className="w-4 h-4 mr-2" />
-                                            Voir
-                                        </a>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-12 text-center">
+                                    <FileText className="w-12 h-12 text-gray-300 mb-4" />
+                                    <p className="text-sm font-medium text-gray-900 mb-1">Aucun document disponible</p>
+                                    <p className="text-sm text-gray-500">Les documents techniques seront affichés ici une fois disponibles.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
 
