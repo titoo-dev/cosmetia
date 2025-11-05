@@ -9,6 +9,7 @@ import { DocumentEntity, ProductCategoryEntity, ProductCountryEntity, ProductFun
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 interface DocumentsClientProps {
     documents: DocumentEntity[];
@@ -139,55 +140,57 @@ export default function DocumentsClient({
             {/* Document Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {documents.map((document) => (
-                    <Card key={document.id} className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <Card key={document.id} className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group">
                         <CardContent className="p-4">
-                            {/* Document Type and Company Info */}
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-xs font-medium text-gray-500 uppercase">
-                                    Document
-                                </span>
-                                <Avatar className="w-8 h-8">
-                                    <AvatarImage 
-                                        src={document.owner?.picture} 
-                                        alt={document.owner?.companyName || 'Company'}
-                                        className="object-cover"
-                                    />
-                                    <AvatarFallback className="bg-blue-500 text-white text-xs font-bold uppercase">
-                                        {document.owner?.companyName?.charAt(0) || 'N/A'}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </div>
-
-                            {/* Company Name */}
-                            <div className="mb-3">
-                                <span className="text-sm font-medium text-gray-700">
-                                    {document.owner?.companyName || 'Unknown Supplier'}
-                                </span>
-                            </div>
-
-                            {/* Document Title */}
-                            <h3 className="font-bold text-sm text-gray-900 mb-3 line-clamp-2">
-                                {document.name}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-xs text-gray-600 mb-4 line-clamp-3">
-                                {document.description}
-                            </p>
-
-                            {/* Technical Sheet */}
-                            {document.technicalSheet && (
-                                <div className="mb-3">
-                                    <p className="text-xs text-gray-500 mb-1">
-                                        <strong>Technical Sheet:</strong>
-                                    </p>
-                                    <p className="text-xs text-gray-600 line-clamp-2">
-                                        {document.technicalSheet}
-                                    </p>
+                            <Link href={`/marketplace/documents/${document.id}`} className="block">
+                                {/* Document Type and Company Info */}
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className="text-xs font-medium text-gray-500 uppercase">
+                                        Document
+                                    </span>
+                                    <Avatar className="w-8 h-8">
+                                        <AvatarImage
+                                            src={document.owner?.picture}
+                                            alt={document.owner?.companyName || 'Company'}
+                                            className="object-cover"
+                                        />
+                                        <AvatarFallback className="bg-blue-500 text-white text-xs font-bold uppercase">
+                                            {document.owner?.companyName?.charAt(0) || 'N/A'}
+                                        </AvatarFallback>
+                                    </Avatar>
                                 </div>
-                            )}
+
+                                {/* Company Name */}
+                                <div className="mb-3">
+                                    <span className="text-sm font-medium text-gray-700">
+                                        {document.owner?.companyName || 'Unknown Supplier'}
+                                    </span>
+                                </div>
+
+                                {/* Document Title */}
+                                <h3 className="font-bold text-sm text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                                    {document.name}
+                                </h3>
+
+                                {/* Description */}
+                                <p className="text-xs text-gray-600 mb-4 line-clamp-3">
+                                    {document.description}
+                                </p>
+
+                                {/* Technical Sheet */}
+                                {document.technicalSheet && (
+                                    <div className="mb-3">
+                                        <p className="text-xs text-gray-500 mb-1">
+                                            <strong>Technical Sheet:</strong>
+                                        </p>
+                                        <p className="text-xs text-gray-600 line-clamp-2">
+                                            {document.technicalSheet}
+                                        </p>
+                                    </div>
+                                )}
+                            </Link>
                             {/* Compare Checkbox */}
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 mt-3" onClick={(e) => e.stopPropagation()}>
                                 <input
                                     type="checkbox"
                                     id={`compare-${document.id}`}

@@ -10,7 +10,7 @@ export async function getCustomerDocuments(params?: {
 }): Promise<DocumentEntity[]> {
     try {
         const searchParams = new URLSearchParams();
-        
+
         if (params?.query) {
             searchParams.append('query', params.query);
         }
@@ -48,7 +48,7 @@ export async function getCustomerDocuments(params?: {
 
 export async function getCustomerDocumentById(id: string): Promise<DocumentEntity | null> {
     try {
-        const response = await fetch(`${process.env.API_BASE_URL}/customer/marketplace/documents/${id}`, {
+        const response = await fetch(`${process.env.API_BASE_URL}/document/customer/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -56,14 +56,13 @@ export async function getCustomerDocumentById(id: string): Promise<DocumentEntit
             cache: "no-store",
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch document with id: ${id}`);
+        if (response.status !== 200) {
+            return null;
         }
 
-        const document = await response.json();
+        const document: DocumentEntity = await response.json();
         return document;
     } catch (error) {
-        console.error(`Error fetching customer document ${id}:`, error);
         return null;
     }
 }

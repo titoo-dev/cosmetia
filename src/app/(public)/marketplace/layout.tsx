@@ -13,12 +13,14 @@ export default function MarketplaceLayout({
   
   const isProductsActive = pathname === "/marketplace" || pathname === "/marketplace/products";
 
-  // display none if url contain id
-  const isIdActive = /\/customer\/marketplace\/products\/[^\/]+/.test(pathname);
+  // Hide tabs on product or document detail pages
+  const isProductDetailPage = /\/marketplace\/products\/[^\/]+/.test(pathname);
+  const isDocumentDetailPage = /\/marketplace\/documents\/[^\/]+/.test(pathname);
+  const isDetailPage = isProductDetailPage || isDocumentDetailPage;
   
   return (
     <div className="min-h-screen bg-gray-50">
-      {!isIdActive && (
+      {!isDetailPage && (
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Tabs value={isProductsActive ? "products" : "documents"} className="w-full">
             <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
