@@ -20,7 +20,7 @@ export async function saveTokens(tokens: AuthTokens): Promise<void> {
 		const cookieStore = await cookies();
 		const expiresAt = tokens.expiresAt
 			? new Date(tokens.expiresAt)
-			: new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+			: new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
 		cookieStore.set('access-token', tokens.accessToken, {
 			...COOKIE_OPTIONS,
