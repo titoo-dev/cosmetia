@@ -23,7 +23,7 @@ export function StepMarketingAngle({
   onNext,
 }: StepMarketingAngleProps) {
   const isValid = () => {
-    return (
+    return !!(
       formData.finalResultFamily &&
       formData.finalResultName &&
       formData.finalResultQuantity > 0 &&
