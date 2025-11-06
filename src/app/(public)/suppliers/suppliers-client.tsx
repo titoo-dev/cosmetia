@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, MessageCircle, CheckCircle, MapPin, Package, FileText } from "lucide-react";
 import { ProductCategoryEntity, ProductCountryEntity, SupplierUserEntity } from "@/lib/types/types";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface SuppliersClientProps {
@@ -159,8 +160,9 @@ export default function SuppliersClient({ suppliers, searchParams, categories, c
                 {/* Supplier Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {suppliers.map((supplier) => (
-                        <Card key={supplier.id} className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0">
-                            <CardContent className="p-0">
+                        <Link href={`/suppliers/${supplier.id}`} key={supplier.id}>
+                            <Card className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 p-0 cursor-pointer">
+                                <CardContent className="p-0">
                                 {/* Supplier Image Placeholder */}
                                 <div className="w-full h-48 bg-gray-200 rounded-tl-lg rounded-tr-lg mb-4 flex items-center justify-center relative overflow-hidden">
                                     <Image
@@ -236,6 +238,7 @@ export default function SuppliersClient({ suppliers, searchParams, categories, c
                                 </div>
                             </CardContent>
                         </Card>
+                        </Link>
                     ))}
                 </div>
 
