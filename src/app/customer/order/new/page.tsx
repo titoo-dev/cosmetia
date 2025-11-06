@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { OrderStepper } from "@/components/customer/order/order-stepper";
 import { StepMarketingAngle } from "@/components/customer/order/step-marketing-angle";
 import { StepPackaging } from "@/components/customer/order/step-packaging";
+import { StepProviders } from "@/components/customer/order/step-providers";
 import { StepPlaceholder } from "@/components/customer/order/step-placeholder";
 import { OrderFormData } from "@/components/customer/order/order-types";
 import { STEPS } from "@/components/customer/order/order-constants";
@@ -78,6 +79,15 @@ export default function OrderCreationPage() {
             onPackagingSelect={(packagingId) => handleInputChange("packagingType", packagingId)}
             onPrevious={handlePrevious}
             onNext={handleNext}
+          />
+        );
+      case 5:
+        return (
+          <StepProviders
+            selectedProviderId={formData.providerId}
+            onProviderSelect={(providerId) => handleInputChange("providerId", providerId)}
+            onPrevious={handlePrevious}
+            onSubmit={handleSubmit}
           />
         );
       default:

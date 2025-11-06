@@ -14,6 +14,14 @@ export interface PackagingOption {
   hoverColor: string;
 }
 
+export interface Provider {
+  id: string;
+  name: string;
+  avatar: string;
+  isCertified: boolean;
+  description: string;
+}
+
 export const PRODUCT_FAMILIES = [
   "Alimentation et nutrition animale",
   "Produit agrochimiques",
@@ -85,4 +93,63 @@ export const STEPS: StepConfig[] = [
   { id: 4, name: "Emballage", icon: Package },
   { id: 5, name: "Prestataires", icon: User },
   { id: 6, name: "Commande", icon: Send },
+];
+
+export const MOCK_PROVIDERS: Provider[] = [
+  {
+    id: "1",
+    name: "Cody Fisher",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "2",
+    name: "Eleanor Pena",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "3",
+    name: "Cody Fisher",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "4",
+    name: "Marvin McKinney",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "5",
+    name: "Courtney Henry",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "6",
+    name: "Dianne Russell",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "7",
+    name: "Darrell Steward",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    id: "8",
+    name: "Darrell Steward",
+    avatar: "",
+    isCertified: true,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  }
 ];
