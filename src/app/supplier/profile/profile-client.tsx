@@ -12,6 +12,7 @@ import { updateSupplierInfoAction } from "@/actions/supplier/register/last-step/
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { SupplierUserEntity } from "@/lib/types/types";
+import Image from "next/image";
 
 interface SupplierProfileClientProps {
     supplierData: SupplierUserEntity;
@@ -66,10 +67,11 @@ export default function SupplierProfileClient({ supplierData }: SupplierProfileC
                         {/* Cover Photo */}
                         <div className="relative h-48 bg-gradient-to-r from-[#166970] to-[#1a7a82] overflow-hidden">
                             {coverPhoto && (
-                                <img 
+                                <Image 
                                     src={coverPhoto} 
                                     alt="Cover" 
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    className="object-cover"
                                 />
                             )}
                             <label

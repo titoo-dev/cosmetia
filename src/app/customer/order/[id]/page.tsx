@@ -1,5 +1,4 @@
 import { getCustomerOrderByIdAction } from "@/actions/customer/orders/[id]/get-customer-order-by-id-action";
-import { redirect } from "next/navigation";
 import OrderDetailClient from "./order-detail-client";
 
 interface OrderPageProps {

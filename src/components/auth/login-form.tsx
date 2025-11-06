@@ -57,6 +57,7 @@ export function LoginForm({ currentUser }: LoginFormProps) {
 					return;
 				}
 			} catch (error) {
+				console.error("Error logging in:", error);
 				toast.error('An unexpected error occurred');
 			}
 		});

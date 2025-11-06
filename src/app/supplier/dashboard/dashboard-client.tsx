@@ -147,7 +147,7 @@ export function DashboardClient({
 }: DashboardClientProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  const [leadsList, setLeadsList] = useState(initialLeads);
+  const [leadsList] = useState(initialLeads);
   const [contextFilter, setContextFilter] = useState<LeadContext | "ALL">("ALL");
   const [showFilters, setShowFilters] = useState(false);
 

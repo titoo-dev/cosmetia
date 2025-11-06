@@ -141,20 +141,6 @@ export default function OrderDetailClient({ order: initialOrder }: OrderDetailCl
     }
   };
 
-  const getStatusProgress = (status: OrderStatus) => {
-    switch (status) {
-      case OrderStatus.FORMULA_PENDING:
-        return { step: 1, total: 3 };
-      case OrderStatus.FORMULA_ACCEPTED:
-        return { step: 2, total: 3 };
-      case OrderStatus.CANCELLED:
-      case OrderStatus.FORMULA_REJECTED:
-        return { step: 0, total: 3 };
-      default:
-        return { step: 0, total: 3 };
-    }
-  };
-
   const handleAddComment = async () => {
     if (!newComment.trim()) {
       toast.error("Le commentaire ne peut pas être vide");

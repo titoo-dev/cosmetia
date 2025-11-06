@@ -37,6 +37,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
         toast.success("Produit supprimé avec succès");
         router.push("/supplier/products");
       } catch (error) {
+        console.error("Error deleting product:", error);
         toast.error("Erreur lors de la suppression du produit");
         setShowDeleteDialog(false);
       }

@@ -20,29 +20,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         notFound();
     }
 
-
-    const getCompanyLogo = (companyName: string) => {
-        const logos: { [key: string]: string } = {
-            "Givaudan": "G",
-            "Symrise": "S",
-            "Firmenich": "F",
-            "Lancôme": "L",
-            "Biotherm": "B"
-        };
-        return logos[companyName] || companyName.charAt(0);
-    };
-
-    const getCompanyLogoColor = (companyName: string) => {
-        const colors: { [key: string]: string } = {
-            "Givaudan": "bg-blue-600",
-            "Symrise": "bg-purple-600",
-            "Firmenich": "bg-green-600",
-            "Lancôme": "bg-red-600",
-            "Biotherm": "bg-blue-500"
-        };
-        return colors[companyName] || "bg-gray-600";
-    };
-
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4">

@@ -63,6 +63,7 @@ export async function getCustomerDocumentById(id: string): Promise<DocumentEntit
         const document: DocumentEntity = await response.json();
         return document;
     } catch (error) {
+        console.error("Error fetching customer document by id:", error);
         return null;
     }
 }

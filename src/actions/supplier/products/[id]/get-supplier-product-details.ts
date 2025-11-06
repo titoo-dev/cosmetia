@@ -30,6 +30,7 @@ export async function getSupplierProductDetails(id: string): Promise<ProductEnti
 
     return product;
   } catch (error) {
+    console.error("Error fetching supplier product details:", error);
     return null;
   }
 }

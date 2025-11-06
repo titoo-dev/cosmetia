@@ -57,6 +57,7 @@ export default function SupplierProductsClient({
         await deleteSupplierProductAction(productToDelete);
         toast.success("Produit supprimé avec succès");
       } catch (error) {
+        console.error("Error deleting product:", error);
         toast.error("Erreur lors de la suppression du produit");
       } finally {
         setProductToDelete(null);

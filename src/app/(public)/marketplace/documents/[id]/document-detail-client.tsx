@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, Share2, FileText } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 
 interface DocumentDetailClientProps {
   document: DocumentEntity;
@@ -141,12 +142,13 @@ export default function DocumentDetailClient({
                   href={`/marketplace/products/${product.id}`}
                   className="flex items-center gap-3 p-3 border rounded-lg hover:bg-accent transition-colors"
                 >
-                  <div className="h-12 w-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                  <div className="h-12 w-12 rounded bg-muted flex items-center justify-center flex-shrink-0 relative overflow-hidden">
                     {product.pictureUrl ? (
-                      <img
+                      <Image
                         src={product.pictureUrl}
                         alt={product.name}
-                        className="h-full w-full object-cover rounded"
+                        fill
+                        className="object-cover rounded"
                       />
                     ) : (
                       <FileText className="h-6 w-6 text-muted-foreground" />

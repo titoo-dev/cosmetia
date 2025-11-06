@@ -1,7 +1,7 @@
 'use server'
 
 import { getAccessToken } from '@/lib/cookies-storage';
-import { CustomerUserEntity, ProviderUserEntity, SupplierUserEntity, UserEntity } from '@/lib/types/types';
+import { CustomerUserEntity, SupplierUserEntity, UserEntity } from '@/lib/types/types';
 
 
 export type CurrentUser = UserEntity & {

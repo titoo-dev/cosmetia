@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Package, Calendar, ChevronLeft, CheckCircle2, XCircle, Clock, User, Layers } from "lucide-react";
 import { SupplierOrderItem } from "@/actions/supplier/orders/get-supplier-orders-action";
 import Link from "next/link";
+import Image from "next/image";
 
 interface OrderDetailClientProps {
   order: SupplierOrderItem;
@@ -169,7 +169,13 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
                 <div className="flex items-center gap-4 bg-gradient-to-r from-blue-50 to-transparent p-4 rounded-lg mb-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#166970] to-[#1a7a82] flex items-center justify-center shadow-sm overflow-hidden">
                     {order.customer.picture ? (
-                      <img src={order.customer.picture} alt={order.customer.companyName} className="w-full h-full object-cover" />
+                      <Image 
+                        src={order.customer.picture} 
+                        alt={order.customer.companyName} 
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover" 
+                      />
                     ) : (
                       <span className="text-white font-bold text-xl">
                         {order.customer.companyName.charAt(0)}
@@ -223,9 +229,14 @@ export default function OrderDetailClient({ order }: OrderDetailClientProps) {
               </div>
               <div className="p-6">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
+                  <div className="w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 relative">
                     {order.product.picture ? (
-                      <img src={order.product.picture} alt={order.product.name} className="w-full h-full object-cover" />
+                      <Image 
+                        src={order.product.picture} 
+                        alt={order.product.name} 
+                        fill
+                        className="object-cover" 
+                      />
                     ) : (
                       <Package className="w-10 h-10 text-gray-400" />
                     )}

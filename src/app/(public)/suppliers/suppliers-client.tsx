@@ -63,21 +63,6 @@ export default function SuppliersClient({ suppliers, searchParams, categories, c
         }
     };
 
-    const getLogoColor = (companyName: string) => {
-        const colors = [
-            "bg-blue-500",
-            "bg-red-500",
-            "bg-green-500",
-            "bg-purple-500",
-            "bg-yellow-500",
-            "bg-indigo-500",
-            "bg-pink-500",
-            "bg-teal-500"
-        ];
-        const index = companyName.length % colors.length;
-        return colors[index];
-    };
-
     const getLogoText = (companyName: string) => {
         return companyName.substring(0, 2).toUpperCase();
     };
